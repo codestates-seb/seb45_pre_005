@@ -14,10 +14,8 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class MemberPatchDto {
 
-    @Nullable
+    @NotBlank(message = "닉네임을 입력해주세요")
+    @Pattern(regexp = "^[A-Za-z0-9가-힣]{2,8}$",
+            message = "닉네임은 특수문자 제외 2~8글자로 이루어져야 합니다.")
     private String nickname;
-    @Nullable
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]$",
-            message = "하나 이상의 영문, 숫자, 특수 문자를 포함해주세요")
-    private String password;
 }

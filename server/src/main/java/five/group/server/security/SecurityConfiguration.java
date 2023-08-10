@@ -17,7 +17,7 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable()
                 .formLogin()
-                .permitAll()
+                .loginPage("/login")
                 .and()
                 .authorizeHttpRequests()
                 .anyRequest()

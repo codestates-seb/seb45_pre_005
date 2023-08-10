@@ -13,6 +13,5 @@ import java.time.LocalDateTime;
 public class MemberResponseDto {
 
     private String nickname;
-    private String email;
 
 }

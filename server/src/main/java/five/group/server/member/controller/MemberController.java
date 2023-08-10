@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @RestController
@@ -27,8 +28,9 @@ public class MemberController {
         this.service = service;
     }
 
+
     @PostMapping
-    public ResponseEntity postMember(@RequestBody MemberPostDto postDto){
+    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto postDto){
         Member member = mapper.postDtoToEntity(postDto);
         service.createMember(member);
 
@@ -36,7 +38,7 @@ public class MemberController {
     }
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                      @RequestBody MemberPatchDto patchDto){
+                                      @Valid @RequestBody MemberPatchDto patchDto){
         Member member = mapper.patchDtoToEntity(patchDto);
         member.setMemberId(memberId);
         Member updatedMember = service.updateMember(member);

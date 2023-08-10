@@ -91,7 +91,7 @@ public class MemberService {
     }
 
     private void verifyAuthentication(Member member, Authentication authentication) {
-        if (!member.getEmail().equals(authentication.getPrincipal())) {
+        if (!member.getEmail().equals(authentication.getName())) {
             throw new RuntimeException(); // 커스텀 익셉션 추가
         }
     }
