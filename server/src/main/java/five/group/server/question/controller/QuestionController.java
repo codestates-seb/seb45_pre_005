@@ -3,17 +3,21 @@ package five.group.server.question.controller;
 import five.group.server.question.dto.QuestionDto;
 import five.group.server.question.entity.Question;
 import five.group.server.question.mapper.QuestionMapper;
+import five.group.server.question.response.PageResponseDto;
 import five.group.server.question.service.QuestionService;
-import five.group.server.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -34,21 +38,27 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
+    public ResponseEntity postQuestion(@Positive Long questionId,
+                                       @Valid @RequestBody QuestionDto.Post requestBody) {
 
         Question question = questionMapper.questionPostDtoToQuestion(requestBody);
 
         Question createdQuestion = questionService.createQuestion(question);
-        URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdQuestion.getId());
+
+        URI location = UriComponentsBuilder
+                .newInstance()
+                .path(QUESTION_DEFAULT_URL + "/{question_id}")
+                .buildAndExpand(questionId)
+                .toUri();
 
         return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{question-id}")
-    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive Long id,
+    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive Long questionId,
                                         @Valid @RequestBody QuestionDto.Patch requestBody) {
 
-        requestBody.setId(id);
+        requestBody.setQuestionId(questionId);
 
         Question question =
                 questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(requestBody));
@@ -57,28 +67,25 @@ public class QuestionController {
     }
 
     @GetMapping("/{question-id}")
-    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long id) {
-        Question question = questionService.getQuestion(id);
+    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId) {
+        Question question = questionService.getQuestion(questionId);
 
         return new ResponseEntity<>(questionMapper.questionToQuestionResponse(question), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getQuestionList() {
-        List<Question> questionList = questionService.getQuestionList();
+    public ResponseEntity getQuestionList(@Positive @RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        Page<Question> pageQuestion = questionService.getQuestionList(pageable);
+        List<Question> questionList = pageQuestion.getContent();
 
-        List<QuestionDto.response> questions =
-                questionList.stream()
-                        .map(question -> questionMapper.questionToQuestionResponse(question))
-                        .collect(Collectors.toList());
-
-        return new ResponseEntity<>(questions, HttpStatus.OK);
+        return new ResponseEntity<>(new PageResponseDto<>(questionMapper.questionsToResponseDto(questionList), pageQuestion), HttpStatus.OK);
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive Long id) {
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive Long questionId) {
 
-        questionService.deleteQuestion(id);
+        questionService.deleteQuestion(questionId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -3,7 +3,7 @@ package five.group.server.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-    QUESTIONE_NOT_FOUND(404, "Question not found");
+    QUESTION_NOT_FOUND(404, "Question not found");
 
     @Getter
     private int code;
