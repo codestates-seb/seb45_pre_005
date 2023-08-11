@@ -1,6 +1,6 @@
 package five.group.server.member.service;
 
-import five.group.server.auth.MemberAuthority;
+
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
 import org.springframework.security.core.Authentication;
@@ -19,12 +19,10 @@ import static five.group.server.member.entity.Member.MemberStatus.MEMBER_QUIT;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MemberAuthority memberAuthority;
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, MemberAuthority memberAuthority) {
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
-        this.memberAuthority = memberAuthority;
     }
 
     public Member createMember(Member member) {
