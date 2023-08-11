@@ -37,8 +37,8 @@ public class Member {
     @Column
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    private List<String> roles = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     // 질문 댓글 답변 필드 추가 //
 

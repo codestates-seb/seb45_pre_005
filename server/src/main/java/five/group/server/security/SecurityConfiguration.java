@@ -2,10 +2,13 @@ package five.group.server.security;
 
 import five.group.server.auth.MemberAuthenticationFailureHandler;
 import five.group.server.auth.MemberAuthenticationSuccessHandler;
+import five.group.server.auth.MemberAuthority;
 import five.group.server.jwt.JwtAuthenticationFilter;
 import five.group.server.jwt.JwtTokenizer;
+import five.group.server.jwt.JwtVerificationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -23,9 +26,11 @@ import java.util.Arrays;
 @Configuration
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
+    private final MemberAuthority memberAuthority;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, MemberAuthority memberAuthority) {
         this.jwtTokenizer = jwtTokenizer;
+        this.memberAuthority = memberAuthority;
     }
 
     @Bean
@@ -40,7 +45,11 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().permitAll()
+                        authorize
+                                .antMatchers(HttpMethod.GET,"/members/**").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH,"/members/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"/members/**").hasRole("USER")
+                                .anyRequest().permitAll()
                 );
 
         return http.build();
@@ -50,26 +59,32 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
     @Bean
-    CorsConfigurationSource corsConfigurationSource(){ // CORS 필터 처리
+    CorsConfigurationSource corsConfigurationSource() { // CORS 필터 처리
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer,HttpSecurity>{
+
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager,jwtTokenizer);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            builder.addFilter(jwtAuthenticationFilter);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer,memberAuthority);
+
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
 }
