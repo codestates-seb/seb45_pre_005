@@ -14,10 +14,11 @@ import java.util.Optional;
 @Component
 public class MemberDetailService implements UserDetailsService {
     private final MemberRepository memberRepository;
+    private final MemberAuthority memberAuthority;
 
-
-    public MemberDetailService(MemberRepository memberRepository) {
+    public MemberDetailService(MemberRepository memberRepository, MemberAuthority memberAuthority) {
         this.memberRepository = memberRepository;
+        this.memberAuthority = memberAuthority;
     }
 
     @Override
@@ -34,14 +35,13 @@ public class MemberDetailService implements UserDetailsService {
             setNickname(member.getNickname());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
-//            setRoles(member.getRoles());
+            setRoles(member.getRoles());
         }
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            //권한 로직이 필요하면 사용하기
-//            return memberAuthority.createAuthorities(this.getRoles());
-            return null;
+            return memberAuthority.createAuthorities(this.getRoles());
+
         }
 
         @Override

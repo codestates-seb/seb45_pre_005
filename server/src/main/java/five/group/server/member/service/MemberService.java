@@ -1,5 +1,6 @@
 package five.group.server.member.service;
 
+
 import five.group.server.auth.MemberAuthority;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
@@ -21,7 +22,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberAuthority memberAuthority;
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, MemberAuthority memberAuthority) {
+
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder,MemberAuthority memberAuthority) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.memberAuthority = memberAuthority;
@@ -32,8 +34,8 @@ public class MemberService {
         verityExistEmail(member.getEmail());
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
-//        List<String> roles = memberAuthority.createRoles();
-//        member.setRoles(roles);
+        List<String> roles = memberAuthority.createRoles();
+        member.setRoles(roles);
 
 
         return memberRepository.save(member);
@@ -41,9 +43,6 @@ public class MemberService {
 
     public Member updateMember(Member member) {
         Member findMember = findVerifyMember(member.getMemberId());
-
-        Authentication authentication = getAuthentication();
-        verifyAuthentication(member,authentication);
 
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickName -> findMember.setNickname(nickName));
@@ -57,17 +56,12 @@ public class MemberService {
     public Member getMember(long memberId) {
         Member findMember = findVerifyMember(memberId);
 
-        Authentication authentication = getAuthentication();
-        verifyAuthentication(findMember,authentication);
         return findMember;
     }
 
     public void deleteMember(long memberId) {
 
         Member findMember = findVerifyMember(memberId);
-
-        Authentication authentication = getAuthentication();
-        verifyAuthentication(findMember,authentication);
         findMember.setMemberStatus(MEMBER_QUIT);
     }
 
@@ -85,15 +79,6 @@ public class MemberService {
         }
 
         return findMember;
-    }
-    private Authentication getAuthentication(){
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
-
-    private void verifyAuthentication(Member member, Authentication authentication) {
-        if (!member.getEmail().equals(authentication.getName())) {
-            throw new RuntimeException(); // 커스텀 익셉션 추가
-        }
     }
 
 }
