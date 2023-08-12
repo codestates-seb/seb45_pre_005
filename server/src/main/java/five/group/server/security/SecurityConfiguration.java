@@ -1,8 +1,6 @@
 package five.group.server.security;
 
-import five.group.server.auth.MemberAuthenticationFailureHandler;
-import five.group.server.auth.MemberAuthenticationSuccessHandler;
-import five.group.server.auth.MemberAuthority;
+import five.group.server.auth.*;
 import five.group.server.jwt.JwtAuthenticationFilter;
 import five.group.server.jwt.JwtTokenizer;
 import five.group.server.jwt.JwtVerificationFilter;
@@ -42,14 +40,18 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .formLogin().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberDeniedHandler())
+                .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .antMatchers(HttpMethod.GET,"/members/**").hasRole("USER")
-                                .antMatchers(HttpMethod.PATCH,"/members/**").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE,"/members/**").hasRole("USER")
-                                .anyRequest().permitAll()
+                                .antMatchers(HttpMethod.GET,"/questions/*").permitAll()
+                                .antMatchers(HttpMethod.GET,"/answers/*").permitAll()
+                                .antMatchers(HttpMethod.GET,"/comments/*").permitAll()
+                                .anyRequest().authenticated() // 보는건 누구나, 작성 조회 삭제 수정은 인증된 사람만
                 );
 
         return http.build();
