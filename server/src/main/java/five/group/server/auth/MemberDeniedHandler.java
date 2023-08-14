@@ -1,5 +1,9 @@
 package five.group.server.auth;
 
+import com.google.gson.Gson;
+import five.group.server.error.ErrorResponse;
+import five.group.server.error.HandlerErrorResponse;
+import five.group.server.exception.ExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +21,11 @@ import java.io.IOException;
 public class MemberDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException { // ErrorResponse 추가하기
-        // ErrorResponse 추가하기
+
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        //        response.getWriter().write(gson.toJson(errorResponse,ErrorResponse.class));
+
+        HandlerErrorResponse.sendErrorResponse(HttpStatus.FORBIDDEN,response);
         log.warn("Forbidden Error : {} ", accessDeniedException.getMessage());
     }
 }

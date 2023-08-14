@@ -8,6 +8,8 @@ import five.group.server.member.entity.Member;
 import five.group.server.member.mapper.MemberGetMapper;
 import five.group.server.member.mapper.MemberMapper;
 import five.group.server.member.service.MemberService;
+import five.group.server.question.dto.QuestionDto;
+import five.group.server.question.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @Validated
@@ -24,10 +27,12 @@ import javax.validation.constraints.Positive;
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
+    private final QuestionService questionService;
 
-    public MemberController(MemberMapper memberMapper, MemberService memberService) {
+    public MemberController(MemberMapper memberMapper, MemberService memberService, QuestionService questionService) {
         this.memberMapper = memberMapper;
         this.memberService = memberService;
+        this.questionService = questionService;
     }
 
 

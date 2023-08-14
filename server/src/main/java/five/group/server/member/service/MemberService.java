@@ -2,11 +2,10 @@ package five.group.server.member.service;
 
 
 import five.group.server.auth.MemberAuthority;
+import five.group.server.exception.BusinessLogicException;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static five.group.server.exception.ExceptionCode.*;
 import static five.group.server.member.entity.Member.MemberStatus.MEMBER_QUIT;
 
 @Service
@@ -68,15 +68,15 @@ public class MemberService {
 
     private void verityExistEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isPresent()) throw new RuntimeException(); // 커스텀 익셉션 추가
+        if (member.isPresent()) throw new BusinessLogicException(MEMBER_NOT_FOUND);
     }
 
     private Member findVerifyMember(long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member findMember = optionalMember.orElseThrow(() -> new RuntimeException()); // 커스텀 익셉션 추가
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_EXIST));
 
         if (findMember.getMemberStatus().getStatus().equals("QUIT")) {
-            throw new RuntimeException(); // 커스텀 익셉션 추가
+            throw new BusinessLogicException(MEMBER_DELETED);
         }
 
         return findMember;

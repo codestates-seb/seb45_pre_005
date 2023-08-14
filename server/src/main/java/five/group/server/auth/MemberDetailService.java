@@ -1,5 +1,7 @@
 package five.group.server.auth;
 
+import five.group.server.exception.BusinessLogicException;
+import five.group.server.exception.ExceptionCode;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Optional;
+
+import static five.group.server.exception.ExceptionCode.MEMBER_NOT_FOUND;
 
 @Component
 public class MemberDetailService implements UserDetailsService {
@@ -24,7 +28,7 @@ public class MemberDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
-        Member finMember = optionalMember.orElseThrow(() -> new RuntimeException()); // 커스텀 익셉션 추가
+        Member finMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_NOT_FOUND));
 
         return new MemberDetails(finMember);
     }

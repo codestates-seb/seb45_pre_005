@@ -1,6 +1,9 @@
 package five.group.server.auth;
 
 
+import com.google.gson.Gson;
+import five.group.server.error.ErrorResponse;
+import five.group.server.error.HandlerErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,11 +19,12 @@ import java.io.IOException;
 public class MemberAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.error("# Authentication failed: {}", exception.getMessage());
-        // ErrorResponse 추가하기
+
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE); // 합병하면 바꿀거
-//        response.getWriter().write(gson.toJson(errorResponse,ErrorResponse.class));
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        HandlerErrorResponse.sendErrorResponse(HttpStatus.UNAUTHORIZED,response);
+
+        log.error("# Authentication failed: {}", exception.getMessage());
     }
 
 }
