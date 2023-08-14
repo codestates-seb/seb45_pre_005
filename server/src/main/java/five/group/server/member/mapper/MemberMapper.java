@@ -5,6 +5,7 @@ import five.group.server.member.dto.MemberPostDto;
 import five.group.server.member.dto.MemberResponseDto;
 import five.group.server.member.entity.Member;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
