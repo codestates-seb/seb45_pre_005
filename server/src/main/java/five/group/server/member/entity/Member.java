@@ -1,5 +1,6 @@
 package five.group.server.member.entity;
 
+import five.group.server.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,7 +41,8 @@ public class Member {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    // 질문 댓글 답변 필드 추가 //
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Question> questionList;
 
 
     public enum MemberStatus {
