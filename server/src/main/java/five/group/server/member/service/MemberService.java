@@ -4,6 +4,7 @@ package five.group.server.member.service;
 import five.group.server.auth.MemberAuthority;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,7 @@ import static five.group.server.member.entity.Member.MemberStatus.MEMBER_QUIT;
 
 @Service
 @Transactional
+@Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,12 +44,11 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
+
         Member findMember = findVerifyMember(member.getMemberId());
 
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickName -> findMember.setNickname(nickName));
-        Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
 
         return findMember;
     }
