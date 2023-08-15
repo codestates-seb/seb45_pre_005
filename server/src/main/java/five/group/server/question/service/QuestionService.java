@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,7 +37,7 @@ public class QuestionService {
         return questionRepository.save(getQuestion);
     }
 
-    public Question getQuestion(Long questionId) {
+    public Question getQuestion(long questionId) {
         return findVerifiedQuestion(questionId);
     }
 
@@ -47,16 +48,27 @@ public class QuestionService {
         return questionRepository.findAll(pageRequest);
     }
 
-    public void deleteQuestion (Long questionId) {
+    public void deleteQuestion (long questionId) {
         Question verifiedQuestion = findVerifiedQuestion(questionId);
         questionRepository.delete(verifiedQuestion);
     }
 
-    public Question findVerifiedQuestion(Long questionId) {
+    // delete 된 질문은 조회 제외 로직이 필요(?)
+    public Question findVerifiedQuestion(long questionId) {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         Question findQuestion = optionalQuestion.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
 
         return findQuestion;
+    }
+
+//     memberId로 질문 조회
+    public List<Question> getMemberId(long memberId) {
+        List<Question> memberIdToQuestion = questionRepository.findByMemberId(memberId);
+
+        if (memberIdToQuestion.isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND);
+        }
+        return memberIdToQuestion;
     }
 }

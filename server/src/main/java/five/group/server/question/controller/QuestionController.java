@@ -1,5 +1,7 @@
 package five.group.server.question.controller;
 
+import five.group.server.member.entity.Member;
+import five.group.server.member.service.MemberService;
 import five.group.server.question.dto.QuestionDto;
 import five.group.server.question.entity.Question;
 import five.group.server.question.mapper.QuestionMapper;
@@ -29,9 +31,12 @@ public class QuestionController {
     private final QuestionMapper questionMapper;
     private final QuestionService questionService;
 
-    public QuestionController(QuestionMapper questionMapper, QuestionService questionService) {
+    private final MemberService memberService;
+
+    public QuestionController(QuestionMapper questionMapper, QuestionService questionService, MemberService memberService) {
         this.questionMapper = questionMapper;
         this.questionService = questionService;
+        this.memberService = memberService;
     }
 
     @PostMapping
@@ -39,13 +44,13 @@ public class QuestionController {
 
         Question question = questionMapper.questionPostDtoToQuestion(requestBody);
 
-        Question createdQuestion = questionService.createQuestion(question);
+        questionService.createQuestion(question);
 
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponse(createdQuestion), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{question-id}")
-    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive Long questionId,
+    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
                                         @Valid @RequestBody QuestionDto.Patch requestBody) {
 
         requestBody.setQuestionId(questionId);
@@ -53,15 +58,15 @@ public class QuestionController {
         Question updateQuestion =
                 questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(requestBody));
 
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponse(updateQuestion), HttpStatus.OK);
+        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(updateQuestion), HttpStatus.OK);
     }
 
     // 질문 상세 페이지
     @GetMapping("/{question-id}")
-    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId) {
+    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
         Question question = questionService.getQuestion(questionId);
 
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponse(question), HttpStatus.OK);
+        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
     }
 
     // 질문 조회 리스트
@@ -75,7 +80,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive Long questionId) {
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive long questionId) {
 
         questionService.deleteQuestion(questionId);
 
