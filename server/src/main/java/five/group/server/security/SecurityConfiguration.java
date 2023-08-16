@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize ->
                         authorize
+                                .antMatchers("/**").permitAll()
                                 .antMatchers(HttpMethod.POST,"/members").permitAll()
                                 .antMatchers(HttpMethod.GET,"/questions/*").permitAll()
                                 .antMatchers(HttpMethod.GET,"/answers/*").permitAll()

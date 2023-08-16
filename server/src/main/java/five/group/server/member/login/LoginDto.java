@@ -1,4 +1,4 @@
-package five.group.server.login;
+package five.group.server.member.login;
 
 import lombok.Getter;
 

@@ -1,5 +1,6 @@
 package five.group.server.member.mapper;
 
+import five.group.server.member.dto.MemberGetResponseDto;
 import five.group.server.member.dto.MemberPatchDto;
 import five.group.server.member.dto.MemberPostDto;
 import five.group.server.member.dto.MemberResponseDto;
@@ -16,4 +17,12 @@ public interface MemberMapper {
 
     MemberResponseDto entityToResponseDto(Member member);
 
+    default MemberGetResponseDto entityToGetResponse(Member member) {
+        return new MemberGetResponseDto(
+                member.getEmail(),
+                member.getNickname(),
+                member.getCreateAt()
+        );
+
+    }
 }
