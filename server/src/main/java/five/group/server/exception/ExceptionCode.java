@@ -10,6 +10,7 @@ public enum ExceptionCode {
     QUESTION_DELETED(204, "Member Deleted"),
     ANSWER_NOT_FOUND(404, "Answer not found."),
     ANSWER_DELETED(204, "Answer Deleted"),
+    ANSWER_CANT_POST(400, "Answer Can't Post more than 10"),
     COMMENT_NOT_FOUND(404, "Comment not found."),
     COMMENT_DELETED(204, "Comment Deleted"),
     NO_PERMISSION_CREATING_POST(403, "Only Members can write post"),
