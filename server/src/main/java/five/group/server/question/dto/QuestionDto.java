@@ -23,7 +23,7 @@ public class QuestionDto {
         @NotBlank(message = "본문을 입력하세요.")
         @Size(max = 200, message = "본문은 최대 200자까지 입력할 수 있습니다.")
         private String content;
-        private long memberId;
+        private Long memberId;
     }
 
     // 질문 수정
@@ -32,7 +32,7 @@ public class QuestionDto {
     @AllArgsConstructor
     public static class Patch {
         @Positive
-        private long questionId;
+        private Long questionId;
 
         @NotBlank(message = "타이틀을 입력하세요.")
         @Size(max = 30, message = "제목은 최대 30자까지 입력할 수 있습니다.")
@@ -42,7 +42,7 @@ public class QuestionDto {
         @Size(max = 200, message = "본문은 최대 200자까지 입력할 수 있습니다.")
         private String content;
 
-        public void setQuestionId(long questionId) {
+        public void setQuestionId(Long questionId) {
             this.questionId = questionId;
         }
     }

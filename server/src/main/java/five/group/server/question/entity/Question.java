@@ -16,16 +16,13 @@ import java.util.List;
 public class Question extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long questionId;
+    private Long questionId;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String content;
-
-    @Column(nullable = false)
-    private boolean isDeleted;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)

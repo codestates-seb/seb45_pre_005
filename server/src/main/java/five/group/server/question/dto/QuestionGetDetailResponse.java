@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionGetDetailResponse {
-    private long questionId;
+    private Long questionId;
     private String nickname;
     private String title;
     private String content;

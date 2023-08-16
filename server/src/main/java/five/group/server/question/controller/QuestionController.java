@@ -50,7 +50,7 @@ public class QuestionController {
     }
 
     @PatchMapping("/{question-id}")
-    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
+    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive Long questionId,
                                         @Valid @RequestBody QuestionDto.Patch requestBody) {
 
         requestBody.setQuestionId(questionId);
@@ -63,7 +63,7 @@ public class QuestionController {
 
     // 질문 상세 페이지
     @GetMapping("/{question-id}")
-    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
+    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive Long questionId) {
         Question question = questionService.getQuestion(questionId);
 
         return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
@@ -80,7 +80,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive long questionId) {
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive Long questionId) {
 
         questionService.deleteQuestion(questionId);
 
