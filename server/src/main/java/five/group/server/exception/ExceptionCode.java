@@ -12,7 +12,10 @@ public enum ExceptionCode {
     ANSWER_DELETED(204, "Answer Deleted"),
     ANSWER_CANT_POST(400, "Answer Can't Post more than 10"),
     COMMENT_NOT_FOUND(404, "Comment not found."),
-    COMMENT_DELETED(204, "Comment Deleted");
+    COMMENT_DELETED(204, "Comment Deleted"),
+    NO_PERMISSION_CREATING_POST(403, "Only Members can write post"),
+    NO_PERMISSION_EDITING_POST(403,"Only Authors can modify post"),
+    NO_PERMISSION_DELETING_POST(403, "Only Authors can delete post");
 
     @Getter
     private int code;

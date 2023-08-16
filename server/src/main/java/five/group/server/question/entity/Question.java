@@ -2,6 +2,7 @@ package five.group.server.question.entity;
 
 import five.group.server.answer.entity.Answer;
 import five.group.server.audit.Auditable;
+import five.group.server.comment.entity.Comment;
 import five.group.server.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +38,6 @@ public class Question extends Auditable {
     public void addAnswer(Answer answer){
         answers.add(answer);
     }
-
 
     public enum QuestionStatus {
         QUESTION_POSTED("글 작성"),
