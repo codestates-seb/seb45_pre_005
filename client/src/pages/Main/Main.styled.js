@@ -51,5 +51,4 @@ export const MainContainer = styled.div`
     border: 1px solid #000000;
     border-right: 0;
   }
-
 `;

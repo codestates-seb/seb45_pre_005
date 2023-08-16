@@ -26,6 +26,7 @@ export const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
   height: 100%;
+
   &:hover {
     background-color: #e3e6e8;
   }
