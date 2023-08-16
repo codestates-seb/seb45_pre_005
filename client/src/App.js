@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import MyPage from './pages/MyPage/MyPage';
 import AddQuestion from './pages/AddQuestion/AddQuestion';
+import DetailQuestion from './pages/DetailQuestion/DetailQuestion';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/add-question" element={<AddQuestion />} />
+        <Route path="/detail-question" element={<DetailQuestion />} />
       </Routes>
     </AppContainer>
   );
