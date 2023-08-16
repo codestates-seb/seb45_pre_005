@@ -39,7 +39,7 @@ export default function SignUp() {
 
     const regExpNickname = /^[A-Za-z0-9가-힣]{2,8}$/
     const regExpEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    const regExpPassword = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$/;
+    const regExpPassword = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&A-Za-z0-9])[A-Za-z0-9$@$!%*#?&]{8,20}$/;
 
     if (!signupInfo.nickname) {
       setErrors((prevErrors) => [...prevErrors, 'Nickname_empty'])
@@ -58,7 +58,7 @@ export default function SignUp() {
     } else if(!regExpPassword.test(signupInfo.password)) {
       setErrors((prevErrors) => [...prevErrors, 'Password_invaild'])
     } else {
-        fetch(`http://localhost:3000/sign-up/members`, {
+        fetch(`/members`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -180,5 +180,3 @@ export default function SignUp() {
     </SignUpContainer>
   );
 }
-
-// form onSubmit={handleSignup}에 적용안됨.
