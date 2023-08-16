@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/add-question" element={<AddQuestion />} />
-        <Route path="/detail-question" element={<DetailQuestion />} />
+        <Route path="/questions/:id" element={<DetailQuestion />} />
       </Routes>
     </AppContainer>
   );
