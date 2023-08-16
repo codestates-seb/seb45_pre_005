@@ -36,10 +36,9 @@ public class SecurityConfiguration {
         http
                 .headers().frameOptions().sameOrigin()
                 .and()
+                .cors(Customizer.withDefaults())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf().disable() // 로컬에서 확인할 때 사용하고 나중에 빼기
-                .cors(Customizer.withDefaults())
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
@@ -48,16 +47,8 @@ public class SecurityConfiguration {
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
-                .authorizeHttpRequests(authorize ->
-                        authorize
+                .authorizeHttpRequests().anyRequest().permitAll();
 
-                                .antMatchers("/**").permitAll() // 테스트용
-                                .antMatchers(HttpMethod.POST,"/members").permitAll()
-                                .antMatchers(HttpMethod.GET,"/questions/*").permitAll()
-                                .antMatchers(HttpMethod.GET,"/answers/*").permitAll()
-                                .antMatchers(HttpMethod.GET,"/comments/**").permitAll()
-                                .anyRequest().authenticated() // 회원가입, 보는건 누구나, 작성 조회 삭제 수정은 인증된 사람만
-                );
 
         return http.build();
     }
@@ -71,7 +62,8 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() { // CORS 필터 처리
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
