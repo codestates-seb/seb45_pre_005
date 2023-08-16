@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static five.group.server.exception.ExceptionCode.QUESTION_DELETED;
 
@@ -87,13 +88,14 @@ public class QuestionService {
         return findQuestion;
     }
 
-    // memberId로 질문 조회
-//    public List<QuestionDto.responsePage> getMemberId(Long memberId) {
-//        List<QuestionDto.responsePage> memberIdToQuestion = questionRepository.findByMemberId(memberId);
-//
-//        if (memberIdToQuestion.isEmpty()) {
-//            throw new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND);
-//        }
-//        return memberIdToQuestion;
-//    }
+    public List<QuestionDto.responsePage> getQuestionsByMemberId(Long memberId) {
+        return questionRepository.findAll().stream()
+                .filter(question -> question.getQuestionStatus() == Question.QuestionStatus.QUESTION_POSTED)
+                .filter(question -> question.getMember().getMemberId() == memberId)
+                .map(question -> new QuestionDto.responsePage(
+                        question.getTitle(),
+                        question.getContent(),
+                        question.getCreatedAt())
+                ).collect(Collectors.toList());
+    }
 }
