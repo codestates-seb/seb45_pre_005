@@ -3,6 +3,7 @@ import Footer from '../../components/Footer/Footer';
 import UserInfo from './UserInfo/UserInfo';
 import { BaseContainer, BaseWrap } from '../../style/Global.styled';
 import { MyPageContainer } from './MyPage.styled';
+import Nav from '../../components/Nav/Nav';
 
 export default function MyPage({ userId }) {
   const [userData, setUserData] = useState(null);
@@ -30,10 +31,9 @@ export default function MyPage({ userId }) {
   return (
     <BaseContainer>
       <BaseWrap>
+        <Nav tabNum={3} />
         <MyPageContainer>
-          <UserInfo
-            userData={userData}
-          />
+          <UserInfo userData={userData} />
         </MyPageContainer>
       </BaseWrap>
       <Footer />

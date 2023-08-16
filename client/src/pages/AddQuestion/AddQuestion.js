@@ -15,18 +15,17 @@ export default function AddQuestion() {
   const [inputTag, setInputTag] = useState('');
   const [tags, setTags] = useState([]);
 
-
   const handleTitleChange = (event) => {
     setInputTitle(event.target.value);
-  }
+  };
 
   const handleBodyChange = (html) => {
     setInputBody(html);
-  }
+  };
 
   const handleTagChange = (event) => {
     setInputTag(event.target.value);
-  }
+  };
 
   const handleTagAdd = (event) => {
     if (event.key === 'Enter' || event.key === ',') {
@@ -37,26 +36,26 @@ export default function AddQuestion() {
       }
       setInputTag('');
     }
-  }
+  };
 
   const handleTagDelete = (event) => {
     const newTags = tags.filter((tag) => tag !== event.target.innerText);
     console.log(newTags);
     setTags(newTags);
-  }
+  };
 
   const handleAllInputDelete = () => {
     setInputTitle('');
     setInputBody('');
     setInputTag('');
     setTags([]);
-  }
+  };
 
   const htmlToText = (html) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     return doc.body.textContent || '';
-  }
+  };
 
   const handleSubmit = async () => {
     if (!inputTitle || htmlToText(inputBody).length < 20 || !tags.length) {
@@ -80,7 +79,7 @@ export default function AddQuestion() {
         },
         body: JSON.stringify(data),
         credentials: 'include',
-        mode: 'cors',
+        mode: 'cors'
       });
 
       if (response.ok) {
@@ -94,9 +93,10 @@ export default function AddQuestion() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  const isSubmitButtonDisabled = !inputTitle || htmlToText(inputBody).length < 20 || !tags.length;
+  const isSubmitButtonDisabled =
+    !inputTitle || htmlToText(inputBody).length < 20 || !tags.length;
 
   return (
     <BaseContainer>
@@ -105,7 +105,7 @@ export default function AddQuestion() {
           <h1>Ask a public question</h1>
           <QuestionGuide />
 
-          <div className='flex-box'>
+          <div className="flex-box">
             <InputForm
               {...inputFormProps.title}
               onFocus={() => setFocusedInput('title')}
@@ -113,11 +113,12 @@ export default function AddQuestion() {
               value={inputTitle}
               nextBtnClick={() => setFocusedInput('body')}
             />
-            {focusedInput === 'title' &&
-              <InputGuide data={inputGuideProps[focusedInput]} />}
+            {focusedInput === 'title' && (
+              <InputGuide data={inputGuideProps[focusedInput]} />
+            )}
           </div>
 
-          <div className='flex-box'>
+          <div className="flex-box">
             <InputForm
               {...inputFormProps.body}
               onFocus={() => setFocusedInput('body')}
@@ -125,11 +126,12 @@ export default function AddQuestion() {
               value={inputBody}
               nextBtnClick={() => setFocusedInput('tag')}
             />
-            {focusedInput === 'body' &&
-              <InputGuide data={inputGuideProps[focusedInput]} />}
+            {focusedInput === 'body' && (
+              <InputGuide data={inputGuideProps[focusedInput]} />
+            )}
           </div>
 
-          <div className='flex-box'>
+          <div className="flex-box">
             <InputForm
               {...inputFormProps.tag}
               onFocus={() => setFocusedInput('tag')}
@@ -139,19 +141,20 @@ export default function AddQuestion() {
               tags={tags}
               handleTagDelete={handleTagDelete}
             />
-            {focusedInput === 'tag' &&
-              <InputGuide data={inputGuideProps[focusedInput]} />}
+            {focusedInput === 'tag' && (
+              <InputGuide data={inputGuideProps[focusedInput]} />
+            )}
           </div>
 
           <button
-            type='submit'
+            type="submit"
             onClick={handleSubmit}
             disabled={isSubmitButtonDisabled}
           >
             Post your question
           </button>
           <button
-            className='red-btn'
+            className="red-btn"
             onClick={() => {
               handleAllInputDelete();
               setFocusedInput(null);
