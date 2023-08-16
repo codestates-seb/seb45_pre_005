@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static five.group.server.exception.ExceptionCode.MEMBER_DELETED;
+import static five.group.server.exception.ExceptionCode.QUESTION_DELETED;
+
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
@@ -53,12 +56,14 @@ public class QuestionService {
         questionRepository.delete(verifiedQuestion);
     }
 
-    // delete 된 질문은 조회 제외 로직이 필요(?)
     public Question findVerifiedQuestion(long questionId) {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         Question findQuestion = optionalQuestion.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
 
+        if (findQuestion.getQuestionStatus().getStatus().equals("QUESTION_DELETE")) {
+            throw new BusinessLogicException(QUESTION_DELETED);
+        }
         return findQuestion;
     }
 
