@@ -52,4 +52,3 @@ export const MainContainer = styled.div`
     border-right: 0;
   }
 `;
-
