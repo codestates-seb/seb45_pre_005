@@ -160,7 +160,6 @@ export default function AddQuestion() {
           >
             Discard draft
           </button>
-
         </AddQuestionContainer>
       </BaseWrap>
       <Footer />
