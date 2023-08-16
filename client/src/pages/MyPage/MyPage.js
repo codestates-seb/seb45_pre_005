@@ -35,7 +35,6 @@ export default function MyPage({ userId }) {
             userData={userData}
           />
         </MyPageContainer>
-
       </BaseWrap>
       <Footer />
     </BaseContainer>
