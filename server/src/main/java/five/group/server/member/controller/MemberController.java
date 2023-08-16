@@ -5,20 +5,19 @@ import five.group.server.member.dto.MemberPatchDto;
 import five.group.server.member.dto.MemberPostDto;
 import five.group.server.member.dto.MemberResponseDto;
 import five.group.server.member.entity.Member;
-import five.group.server.member.mapper.MemberGetMapper;
 import five.group.server.member.mapper.MemberMapper;
 import five.group.server.member.service.MemberService;
-import five.group.server.question.dto.QuestionDto;
 import five.group.server.question.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.List;
 
 @RestController
 @Validated
@@ -57,7 +56,7 @@ public class MemberController {
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
         Member findMember = memberService.getMember(memberId);
-        MemberGetResponseDto response = MemberGetMapper.entityToGetResponse(findMember);
+        MemberGetResponseDto response = memberMapper.entityToGetResponse(findMember);
         // 질문 리스트 추가로 반환 //
 
         return new ResponseEntity(response,HttpStatus.OK);

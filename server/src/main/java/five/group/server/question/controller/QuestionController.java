@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -35,7 +36,8 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody,
+                                       HttpServletRequest request) {
 
         Question question = questionMapper.questionPostDtoToQuestion(requestBody);
 

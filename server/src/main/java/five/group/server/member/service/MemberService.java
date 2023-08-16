@@ -6,6 +6,7 @@ import five.group.server.exception.BusinessLogicException;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,16 +69,23 @@ public class MemberService {
 
     private void verityExistEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isPresent()) throw new BusinessLogicException(MEMBER_NOT_FOUND);
+        if (member.isPresent()) throw new BusinessLogicException(MEMBER_EXIST);
     }
 
     private Member findVerifyMember(long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_EXIST));
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_NOT_FOUND));
 
         if (findMember.getMemberStatus().getStatus().equals("QUIT")) {
             throw new BusinessLogicException(MEMBER_DELETED);
         }
+
+        return findMember;
+    }
+    public Member findPostMember(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<Member> optionalMember =  memberRepository.findByEmail(username);
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_NOT_FOUND));
 
         return findMember;
     }

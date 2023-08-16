@@ -1,12 +1,12 @@
 package five.group.server.question.entity;
 
+import five.group.server.answer.entity.Answer;
 import five.group.server.audit.Auditable;
-import five.group.server.comment.entity.Comment;
+import five.group.server.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -27,15 +27,17 @@ public class Question extends Auditable {
     @Column(nullable = false)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_POSTED;
 
-    //    @ManyToOne
-//    @JoinColumn(name = "memberId")
-//    private Member member;
-//
-//    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-//    private List<Answer> answers;
+    @ManyToOne
+    @JoinColumn(name = "memberId")
+    private Member member;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
+    private List<Answer> answers;
+
+    public void addAnswer(Answer answer){
+        answers.add(answer);
+    }
+
 
     public enum QuestionStatus {
         QUESTION_POSTED("글 작성"),
