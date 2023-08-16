@@ -7,7 +7,9 @@ import five.group.server.member.dto.MemberResponseDto;
 import five.group.server.member.entity.Member;
 import five.group.server.member.mapper.MemberMapper;
 import five.group.server.member.service.MemberService;
+import five.group.server.question.dto.QuestionDto;
 import five.group.server.question.service.QuestionService;
+import five.group.server.uitls.MultiResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @Validated
@@ -58,8 +61,9 @@ public class MemberController {
         Member findMember = memberService.getMember(memberId);
         MemberGetResponseDto response = memberMapper.entityToGetResponse(findMember);
         // 질문 리스트 추가로 반환 //
+        List<QuestionDto.responsePage> resposeList = questionService.getQuestionsByMemberId(findMember.getMemberId());
 
-        return new ResponseEntity(response,HttpStatus.OK);
+        return new ResponseEntity(new MultiResponseDto(response,resposeList),HttpStatus.OK);
     }
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId){
