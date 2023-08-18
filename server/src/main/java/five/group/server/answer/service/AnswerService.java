@@ -1,16 +1,19 @@
 package five.group.server.answer.service;
 
 import five.group.server.answer.dto.AnswerDetailResponseDto;
+import five.group.server.answer.dto.AnswerToCommentDto;
 import five.group.server.answer.entity.Answer;
+import five.group.server.answer.mapper.AnswerMapper;
 import five.group.server.answer.repository.AnswerRepository;
+import five.group.server.comment.dto.CommentDetailResponseDto;
+import five.group.server.comment.entity.Comment;
+import five.group.server.comment.service.CommentService;
 import five.group.server.exception.BusinessLogicException;
 
 import five.group.server.member.entity.Member;
-import five.group.server.member.repository.MemberRepository;
 import five.group.server.member.service.MemberService;
 import five.group.server.question.entity.Question;
 import five.group.server.question.service.QuestionService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +29,14 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
     private final MemberService memberService;
+    private final AnswerMapper answerMapper;
 
-    public AnswerService(AnswerRepository answerRepository, QuestionService questionService, MemberService memberService) {
+    public AnswerService(AnswerRepository answerRepository, QuestionService questionService, MemberService memberService,
+                         AnswerMapper answerMapper) {
         this.answerRepository = answerRepository;
         this.questionService = questionService;
         this.memberService = memberService;
+        this.answerMapper = answerMapper;
     }
 
     public Answer createAnswer(Answer answer, Long questionId) {
@@ -62,16 +68,25 @@ public class AnswerService {
     }
 
     //getQuestion 호출시 뿌려줄 Answer 값들
-    public List<AnswerDetailResponseDto> getAnswers(Long questionId){
+//    public List<AnswerDetailResponseDto> getAnswers(Long questionId){
+//        return answerRepository.findAll().stream()
+//                .filter(answer -> answer.getAnswerStatus() == Answer.AnswerStatus.ANSWER_POSTED)
+//                .filter(answer -> questionId == answer.getQuestion().getQuestionId())
+//                .map(answer -> new AnswerDetailResponseDto(
+//                        answer.getMember().getNickname(),
+//                        answer.getTitle(),
+//                        answer.getContent(),
+//                        answer.getCreateAt()
+//                ))
+//                .collect(Collectors.toList());
+//    }
+
+    // getQuestion 호출 시 Comment를 포함한 Answer 값을 반환
+    public List<AnswerToCommentDto> getAnswers(Long questionId){
         return answerRepository.findAll().stream()
                 .filter(answer -> answer.getAnswerStatus() == Answer.AnswerStatus.ANSWER_POSTED)
                 .filter(answer -> questionId == answer.getQuestion().getQuestionId())
-                .map(answer -> new AnswerDetailResponseDto(
-                        answer.getMember().getNickname(),
-                        answer.getTitle(),
-                        answer.getContent(),
-                        answer.getCreateAt()
-                ))
+                .map(answer -> answerMapper.answerToAnswerResponseDtos(answer))
                 .collect(Collectors.toList());
     }
 
@@ -80,7 +95,7 @@ public class AnswerService {
         findAnswer.setAnswerStatus(Answer.AnswerStatus.ANSWER_DELETED);
     }
 
-    private Answer findVerifiedAnswer(Long answerId) {
+    public Answer findVerifiedAnswer(Long answerId) {
         Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
         Answer findAnswer = optionalAnswer.orElseThrow(() ->
                 new BusinessLogicException(ANSWER_NOT_FOUND));
@@ -96,6 +111,4 @@ public class AnswerService {
             throw new BusinessLogicException(ANSWER_CANT_POST);
         }
     }
-
-
 }
