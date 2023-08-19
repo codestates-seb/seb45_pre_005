@@ -2,7 +2,7 @@ package five.group.server.comment.entity;
 
 import five.group.server.answer.entity.Answer;
 import five.group.server.audit.Auditable;
-import five.group.server.question.entity.Question;
+import five.group.server.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +20,12 @@ public class Comment extends Auditable {
     @Column(nullable = false)
     private String content;
 
+    @Column(updatable = false)
+    private LocalDateTime createAt = LocalDateTime.now();
+
+    @Column
+    private LocalDateTime modifiedAt = LocalDateTime.now();
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private CommentStatus commentStatus = CommentStatus.COMMENT_POSTED;
@@ -27,6 +33,10 @@ public class Comment extends Auditable {
     @ManyToOne
     @JoinColumn(name = "answerId")
     private Answer answer;
+
+    @ManyToOne
+    @JoinColumn(name = "memberId")
+    private Member member;
 
     public enum CommentStatus {
         COMMENT_POSTED("댓글 작성"),

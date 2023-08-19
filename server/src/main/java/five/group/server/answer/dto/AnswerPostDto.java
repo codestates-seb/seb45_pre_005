@@ -18,4 +18,5 @@ public class AnswerPostDto {
     private String content;
     @Positive
     private Long questionId;
+    private Long memberId;
 }

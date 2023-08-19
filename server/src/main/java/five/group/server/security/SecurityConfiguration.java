@@ -45,6 +45,8 @@ public class SecurityConfiguration {
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
                 .accessDeniedHandler(new MemberDeniedHandler())
                 .and()
+                .csrf()
+                .disable()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests().anyRequest().permitAll();
@@ -61,9 +63,11 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() { // CORS 필터 처리
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("PATCH","DELETE","POST","OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
