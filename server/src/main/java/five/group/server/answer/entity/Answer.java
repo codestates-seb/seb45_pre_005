@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,14 +39,14 @@ public class Answer {
     private Question question;
 
     @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
-    private List<Comment> commentList;
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
 
     public void addComment(Comment comment){
-        commentList.add(comment);
+        comments.add(comment);
     }
 
     public enum AnswerStatus {

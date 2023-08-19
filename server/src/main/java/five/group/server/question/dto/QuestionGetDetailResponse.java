@@ -1,8 +1,10 @@
 package five.group.server.question.dto;
 
+import five.group.server.answer.dto.AnswerDetailResponseDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter

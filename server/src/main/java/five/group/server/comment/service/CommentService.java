@@ -1,4 +1,5 @@
 package five.group.server.comment.service;
+import five.group.server.answer.dto.AnswerDetailResponseDto;
 
 import five.group.server.answer.entity.Answer;
 import five.group.server.answer.service.AnswerService;
@@ -9,6 +10,7 @@ import five.group.server.exception.BusinessLogicException;
 import five.group.server.exception.ExceptionCode;
 import five.group.server.member.entity.Member;
 import five.group.server.member.service.MemberService;
+
 import five.group.server.question.entity.Question;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static five.group.server.exception.ExceptionCode.NO_AUTHORIZATION;
+
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Service
 public class CommentService {
@@ -40,6 +50,17 @@ public class CommentService {
         findAnswer.addComment(comment);
         comment.setAnswer(findAnswer);
 
+    public Comment createComment(Comment comment, Long answerId) {
+
+        Answer findAnswer = answerService.findVerifiedAnswer(answerId);
+
+        findAnswer.addComment(comment);
+
+        Member findMember = memberService.findPostMember();
+
+        comment.setMember(findMember);
+
+
         return commentRepository.save(comment);
     }
 
@@ -50,6 +71,7 @@ public class CommentService {
 
         Optional.ofNullable(comment.getContent())
                 .ifPresent(content -> findComment.setContent(content));
+
 
         return commentRepository.save(findComment);
     }
@@ -77,8 +99,27 @@ public class CommentService {
         Comment findComment = findVerifiedComment(commentId);
         verifyAuthorization(findComment);
         commentRepository.delete(findComment);
+
+        return getComment;
     }
 
+    public void deleteComment (Long commentId) {
+        Comment verifiedComment = findVerifiedComment(commentId);
+        verifiedComment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETE);
+
+    }
+
+    public List<CommentDetailResponseDto> getComments(Long answerId){
+        return commentRepository.findAll().stream()
+                .filter(comment -> comment.getCommentStatus() == Comment.CommentStatus.COMMENT_POSTED)
+                .filter(comment -> answerId == comment.getAnswer().getAnswerId())
+                .map(comment -> new CommentDetailResponseDto(
+                        comment.getMember().getNickname(),
+                        comment.getContent(),
+                        comment.getCreateAt()
+                ))
+                .collect(Collectors.toList());
+    }
     public Comment findVerifiedComment(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         Comment findComment = optionalComment.orElseThrow(() ->

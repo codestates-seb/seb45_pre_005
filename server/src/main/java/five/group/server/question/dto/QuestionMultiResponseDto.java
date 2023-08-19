@@ -1,4 +1,4 @@
-package five.group.server.uitls;
+package five.group.server.question.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MultiResponseDto <T,B>{
+public class QuestionMultiResponseDto<T> {
     private T data;
-    private List<B> list;
-
+    private List<? extends T> answer;
+    private int answerCount;
 }

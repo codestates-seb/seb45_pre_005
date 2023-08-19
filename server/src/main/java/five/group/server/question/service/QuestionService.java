@@ -1,13 +1,20 @@
 package five.group.server.question.service;
 
+
 import five.group.server.answer.entity.Answer;
+
+import five.group.server.answer.repository.AnswerRepository;
+import five.group.server.answer.service.AnswerService;
+
 import five.group.server.exception.BusinessLogicException;
 import five.group.server.exception.ExceptionCode;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
 import five.group.server.member.service.MemberService;
 import five.group.server.question.dto.QuestionDto;
+import five.group.server.question.dto.QuestionGetDetailResponse;
 import five.group.server.question.entity.Question;
+import five.group.server.question.mapper.QuestionMapper;
 import five.group.server.question.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +40,7 @@ public class QuestionService {
     public QuestionService(QuestionRepository questionRepository, MemberService memberService) {
         this.questionRepository = questionRepository;
         this.memberService = memberService;
-    }
+
 
     public Question createQuestion(Question question) {
         Member findMember = memberService.findAuthenticatedMember();
@@ -56,10 +63,12 @@ public class QuestionService {
     }
 
     public Question getQuestion(Long questionId) {
+
         Question findQuestion = findVerifiedQuestion(questionId);
         findQuestion.setViewCount(findQuestion.getViewCount() + 1);
 
         return findQuestion;
+
     }
 
     public Page<Question> getQuestionList(Pageable pageable) {
@@ -69,11 +78,13 @@ public class QuestionService {
         return questionRepository.findAll(pageRequest);
     }
 
+
     public void deleteQuestion(Long questionId) {
         Question findQuestion = findVerifiedQuestion(questionId);
         verifyAuthorization(findQuestion);
         isQuestionDeleted(findQuestion);
         findQuestion.setQuestionStatus(Question.QuestionStatus.QUESTION_DELETE);
+
     }
 
     public Question findVerifiedQuestion(Long questionId) {
@@ -96,6 +107,7 @@ public class QuestionService {
                         question.getContent(),
                         question.getMember().getNickname(),
                         question.getCreatedAt())
+
                 ).collect(Collectors.toList());
     }
 

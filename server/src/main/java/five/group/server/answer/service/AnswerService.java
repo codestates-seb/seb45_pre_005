@@ -1,7 +1,9 @@
 package five.group.server.answer.service;
 
 import five.group.server.answer.dto.AnswerDetailResponseDto;
+import five.group.server.answer.dto.AnswerToCommentDto;
 import five.group.server.answer.entity.Answer;
+import five.group.server.answer.mapper.AnswerMapper;
 import five.group.server.answer.repository.AnswerRepository;
 import five.group.server.comment.dto.CommentDetailResponseDto;
 import five.group.server.comment.entity.Comment;
@@ -10,12 +12,12 @@ import five.group.server.exception.BusinessLogicException;
 
 import five.group.server.exception.ExceptionCode;
 import five.group.server.member.entity.Member;
-import five.group.server.member.repository.MemberRepository;
 import five.group.server.member.service.MemberService;
 import five.group.server.question.entity.Question;
 import five.group.server.question.service.QuestionService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
     private final MemberService memberService;
+
     private final CommentService commentService;
 
     public AnswerService(AnswerRepository answerRepository, QuestionService questionService, MemberService memberService, @Lazy CommentService commentService) {
@@ -38,6 +41,7 @@ public class AnswerService {
         this.questionService = questionService;
         this.memberService = memberService;
         this.commentService = commentService;
+
     }
 
     public Answer createAnswer(Answer answer, Long questionId) {
@@ -74,6 +78,7 @@ public class AnswerService {
     }
 
     //getQuestion 호출시 뿌려줄 Answer 값들
+
     public List<AnswerDetailResponseDto> getAnswers(Long questionId) {
         Question findQuestion = questionService.findVerifiedQuestion(questionId);
         List<Answer> answerList = findQuestion.getAnswers();
@@ -88,6 +93,28 @@ public class AnswerService {
 
                 )).collect(Collectors.toList());
         return answerDetailList;
+
+//    public List<AnswerDetailResponseDto> getAnswers(Long questionId){
+//        return answerRepository.findAll().stream()
+//                .filter(answer -> answer.getAnswerStatus() == Answer.AnswerStatus.ANSWER_POSTED)
+//                .filter(answer -> questionId == answer.getQuestion().getQuestionId())
+//                .map(answer -> new AnswerDetailResponseDto(
+//                        answer.getMember().getNickname(),
+//                        answer.getTitle(),
+//                        answer.getContent(),
+//                        answer.getCreateAt()
+//                ))
+//                .collect(Collectors.toList());
+//    }
+
+    // getQuestion 호출 시 Comment를 포함한 Answer 값을 반환
+    public List<AnswerToCommentDto> getAnswers(Long questionId){
+        return answerRepository.findAll().stream()
+                .filter(answer -> answer.getAnswerStatus() == Answer.AnswerStatus.ANSWER_POSTED)
+                .filter(answer -> questionId == answer.getQuestion().getQuestionId())
+                .map(answer -> answerMapper.answerToAnswerResponseDtos(answer))
+                .collect(Collectors.toList());
+
     }
 
     public void deleteAnswer(Long answerId) {
@@ -97,7 +124,7 @@ public class AnswerService {
         findAnswer.setAnswerStatus(Answer.AnswerStatus.ANSWER_DELETED);
     }
 
-    private Answer findVerifiedAnswer(Long answerId) {
+    public Answer findVerifiedAnswer(Long answerId) {
         Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
         Answer findAnswer = optionalAnswer.orElseThrow(() ->
                 new BusinessLogicException(ANSWER_NOT_FOUND));
@@ -115,6 +142,7 @@ public class AnswerService {
             throw new BusinessLogicException(ANSWER_CANT_POST);
         }
     }
+
     private void verifyAuthorization(Answer answer) {
         Member findMember = memberService.findAuthenticatedMember();
         if (answer.getMember().getMemberId() != findMember.getMemberId()) {
@@ -130,4 +158,5 @@ public class AnswerService {
 
 
     }
+
 }
