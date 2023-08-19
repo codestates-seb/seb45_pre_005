@@ -1,4 +1,4 @@
-package five.group.server.jwt;
+package five.group.server.auth.jwt;
 
 import five.group.server.auth.MemberAuthority;
 import io.jsonwebtoken.ExpiredJwtException;

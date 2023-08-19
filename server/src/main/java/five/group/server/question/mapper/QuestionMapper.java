@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
-    @Mapping(source = "memberId", target = "member.memberId")
+//    @Mapping(source = "memberId", target = "member.memberId")
     Question questionPostDtoToQuestion(QuestionDto.Post requestBody);
     Question questionPatchDtoToQuestion(QuestionDto.Patch requestBody);
     List<QuestionDto.responsePage> questionsToQuestionList(List<Question> questionList);
@@ -20,6 +20,7 @@ public interface QuestionMapper {
                 QuestionDto.responsePage.builder()
                         .title(question.getTitle())
                         .nickname(question.getMember().getNickname())
+                        .content(question.getContent())
                         .createdAt(question.getCreatedAt())
                         .build();
 
@@ -34,6 +35,7 @@ public interface QuestionMapper {
                         .nickname(question.getMember().getNickname())
                         .title(question.getTitle())
                         .content(question.getContent())
+                        .viewCount(question.getViewCount())
                         .createdAt(question.getCreatedAt())
                         .modifiedAt(question.getModifiedAt())
                         .build();

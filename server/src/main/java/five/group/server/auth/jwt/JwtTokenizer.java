@@ -1,4 +1,4 @@
-package five.group.server.jwt;
+package five.group.server.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

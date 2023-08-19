@@ -1,9 +1,9 @@
 package five.group.server.security;
 
 import five.group.server.auth.*;
-import five.group.server.jwt.JwtAuthenticationFilter;
-import five.group.server.jwt.JwtTokenizer;
-import five.group.server.jwt.JwtVerificationFilter;
+import five.group.server.auth.jwt.JwtAuthenticationFilter;
+import five.group.server.auth.jwt.JwtTokenizer;
+import five.group.server.auth.jwt.JwtVerificationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .cors(Customizer.withDefaults())
+                .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
@@ -47,7 +48,21 @@ public class SecurityConfiguration {
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
-                .authorizeHttpRequests().anyRequest().permitAll();
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.GET,"/members").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/members").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/members").hasRole("USER")
+                        .antMatchers(HttpMethod.POST,"/questions").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/questions/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/questions/*").hasRole("USER")
+                        .antMatchers(HttpMethod.POST,"/answers/*").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/answers/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/answers/*").hasRole("USER")
+                        .antMatchers(HttpMethod.POST,"/comments/*").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/comments/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/comments/*").hasRole("USER")
+                        .anyRequest().permitAll()
+                );
 
 
         return http.build();
@@ -61,9 +76,10 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() { // CORS 필터 처리
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET","PATCH","DELETE","POST","OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

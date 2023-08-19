@@ -1,9 +1,11 @@
 package five.group.server.question.service;
 
+import five.group.server.answer.entity.Answer;
 import five.group.server.exception.BusinessLogicException;
 import five.group.server.exception.ExceptionCode;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
+import five.group.server.member.service.MemberService;
 import five.group.server.question.dto.QuestionDto;
 import five.group.server.question.entity.Question;
 import five.group.server.question.repository.QuestionRepository;
@@ -14,55 +16,50 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static five.group.server.exception.ExceptionCode.QUESTION_DELETED;
+import static five.group.server.exception.ExceptionCode.*;
 
 @Service
+@Transactional
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    public QuestionService(QuestionRepository questionRepository, MemberRepository memberRepository) {
+    public QuestionService(QuestionRepository questionRepository, MemberService memberService) {
         this.questionRepository = questionRepository;
-        this.memberRepository = memberRepository;
+        this.memberService = memberService;
     }
 
     public Question createQuestion(Question question) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String memberCheck = authentication.getName();
-        System.out.println(memberCheck);
+        Member findMember = memberService.findAuthenticatedMember();
+        question.setMember(findMember);
 
-        Optional<Member> verifiedMember = memberRepository.findByEmail(memberCheck);
-        System.out.println(memberCheck);
-
-        Member member = verifiedMember.orElseThrow(
-                () -> new BusinessLogicException(ExceptionCode.NO_PERMISSION_CREATING_POST));
-
-        Question createQuestion = new Question();
-        createQuestion.setTitle(question.getTitle());
-        createQuestion.setContent(question.getContent());
-        createQuestion.setMember(member);
-
-        return questionRepository.save(createQuestion);
+        return questionRepository.save(question);
     }
 
     public Question updateQuestion(Question question) {
-        Question getQuestion = findVerifiedQuestion(question.getQuestionId());
+        Question findQuestion = findVerifiedQuestion(question.getQuestionId());
+        verifyAuthorization(findQuestion);
+        isQuestionDeleted(findQuestion);
 
         Optional.ofNullable(question.getTitle())
-                .ifPresent(title -> getQuestion.setTitle(title));
+                .ifPresent(title -> findQuestion.setTitle(title));
         Optional.ofNullable(question.getContent())
-                .ifPresent(content -> getQuestion.setContent(content));
+                .ifPresent(content -> findQuestion.setContent(content));
 
-        return questionRepository.save(getQuestion);
+        return questionRepository.save(findQuestion);
     }
 
     public Question getQuestion(Long questionId) {
-        return findVerifiedQuestion(questionId);
+        Question findQuestion = findVerifiedQuestion(questionId);
+        findQuestion.setViewCount(findQuestion.getViewCount() + 1);
+
+        return findQuestion;
     }
 
     public Page<Question> getQuestionList(Pageable pageable) {
@@ -72,9 +69,11 @@ public class QuestionService {
         return questionRepository.findAll(pageRequest);
     }
 
-    public void deleteQuestion (Long questionId) {
-        Question verifiedQuestion = findVerifiedQuestion(questionId);
-        questionRepository.delete(verifiedQuestion);
+    public void deleteQuestion(Long questionId) {
+        Question findQuestion = findVerifiedQuestion(questionId);
+        verifyAuthorization(findQuestion);
+        isQuestionDeleted(findQuestion);
+        findQuestion.setQuestionStatus(Question.QuestionStatus.QUESTION_DELETE);
     }
 
     public Question findVerifiedQuestion(Long questionId) {
@@ -95,7 +94,22 @@ public class QuestionService {
                 .map(question -> new QuestionDto.responsePage(
                         question.getTitle(),
                         question.getContent(),
+                        question.getMember().getNickname(),
                         question.getCreatedAt())
                 ).collect(Collectors.toList());
+    }
+
+    private void verifyAuthorization(Question question) {
+        Member findMember = memberService.findAuthenticatedMember();
+        if (question.getMember().getMemberId() != findMember.getMemberId()) {
+            throw new BusinessLogicException(NO_AUTHORIZATION);
+        }
+    }
+
+    private void isQuestionDeleted(Question question) {
+
+        if (question.getQuestionStatus().equals(Question.QuestionStatus.QUESTION_DELETE)) {
+            throw new BusinessLogicException(QUESTION_DELETED);
+        }
     }
 }

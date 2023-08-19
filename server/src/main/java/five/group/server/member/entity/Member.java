@@ -1,6 +1,7 @@
 package five.group.server.member.entity;
 
 import five.group.server.answer.entity.Answer;
+import five.group.server.comment.entity.Comment;
 import five.group.server.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Answer> answerList;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
 
 
     public enum MemberStatus {

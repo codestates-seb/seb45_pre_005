@@ -14,6 +14,7 @@ public class QuestionGetDetailResponse {
     private String nickname;
     private String title;
     private String content;
+    private int viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }
