@@ -1,19 +1,16 @@
-package five.group.server.member.dto;
+package five.group.server.comment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class MemberResponseDto {
-
+public class CommentDetailResponseDto {
     private String nickname;
+    private String content;
     private LocalDateTime createAt;
-    private LocalDateTime modifiedAt;
-
 }

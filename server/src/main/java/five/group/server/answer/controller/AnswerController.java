@@ -8,12 +8,15 @@ import five.group.server.answer.dto.AnswerResponseDto;
 import five.group.server.answer.entity.Answer;
 import five.group.server.answer.mapper.AnswerMapper;
 import five.group.server.answer.service.AnswerService;
+import five.group.server.comment.dto.CommentDetailResponseDto;
+import five.group.server.comment.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("/answers")
@@ -21,10 +24,12 @@ import javax.validation.constraints.Positive;
 public class AnswerController {
     private final AnswerService answerService;
     private final AnswerMapper answerMapper;
+    private final CommentService commentService;
 
-    public AnswerController(AnswerService answerService, AnswerMapper answerMapper) {
+    public AnswerController(AnswerService answerService, AnswerMapper answerMapper,CommentService commentService) {
         this.answerService = answerService;
         this.answerMapper = answerMapper;
+        this.commentService = commentService;
     }
 
     @PostMapping
@@ -45,13 +50,14 @@ public class AnswerController {
 
         return new ResponseEntity(response,HttpStatus.OK);
     }
-    @GetMapping("/{answer-id}")
-    public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive Long answerId){
-        Answer answer = answerService.getAnswer(answerId);
-        AnswerDetailResponseDto response = answerMapper.entityToDetailResponse(answer,answer.getMember());
-
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
+//    @GetMapping("/{answer-id}")
+//    public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive Long answerId){
+//        Answer answer = answerService.getAnswer(answerId);
+//        List<CommentDetailResponseDto> commentList = commentService.getComments(answerId);
+//        AnswerDetailResponseDto response = answerMapper.entityToDetailResponse(answer,answer.getMember(),commentList);
+//
+//        return new ResponseEntity(response, HttpStatus.OK);
+//    }
     @DeleteMapping("/{answer-id}")
     public ResponseEntity deleteAnswer(@PathVariable("answer-id") Long answerId){
 

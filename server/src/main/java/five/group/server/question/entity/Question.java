@@ -24,6 +24,9 @@ public class Question extends Auditable {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private int viewCount = 0;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_POSTED;

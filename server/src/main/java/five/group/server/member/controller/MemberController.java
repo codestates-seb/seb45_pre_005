@@ -6,6 +6,7 @@ import five.group.server.member.dto.MemberPostDto;
 import five.group.server.member.dto.MemberResponseDto;
 import five.group.server.member.entity.Member;
 import five.group.server.member.mapper.MemberMapper;
+import five.group.server.member.repository.MemberRepository;
 import five.group.server.member.service.MemberService;
 import five.group.server.question.dto.QuestionDto;
 import five.group.server.question.service.QuestionService;
@@ -45,21 +46,20 @@ public class MemberController {
 
         return new ResponseEntity(HttpStatus.CREATED);
     }
-    @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestBody MemberPatchDto patchDto){
+    @PatchMapping()
+    public ResponseEntity patchMember(@Valid @RequestBody MemberPatchDto patchDto){
 
         Member member = memberMapper.patchDtoToEntity(patchDto);
-        member.setMemberId(memberId);
         Member updatedMember = memberService.updateMember(member);
         MemberResponseDto response = memberMapper.entityToResponseDto(updatedMember);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
-        Member findMember = memberService.getMember(memberId);
-        MemberGetResponseDto response = memberMapper.entityToGetResponse(findMember);
+    @GetMapping()
+    public ResponseEntity getMember(){
+        // 토큰으로 멤버 찾기
+        Member findMember = memberService.getMember();
+        MemberResponseDto response = memberMapper.entityToResponseDto(findMember);
         // 질문 리스트 추가로 반환 //
         List<QuestionDto.responsePage> resposeList = questionService.getQuestionsByMemberId(findMember.getMemberId());
 

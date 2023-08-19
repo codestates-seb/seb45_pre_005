@@ -1,4 +1,4 @@
-package five.group.server.jwt;
+package five.group.server.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import five.group.server.member.login.LoginDto;

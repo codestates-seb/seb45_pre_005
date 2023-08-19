@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MultiResponseDto <T>{
+public class MultiResponseDto <T,B>{
     private T data;
-    private List<T> list;
+    private List<B> list;
 }

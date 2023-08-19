@@ -46,7 +46,7 @@ public class MemberService {
 
     public Member updateMember(Member member) {
 
-        Member findMember = findVerifyMember(member.getMemberId());
+        Member findMember = findAuthenticatedMember();
 
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickName -> findMember.setNickname(nickName));
@@ -55,10 +55,8 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member getMember(long memberId) {
-        Member findMember = findVerifyMember(memberId);
-
-        return findMember;
+    public Member getMember() {
+        return findAuthenticatedMember();
     }
 
     public void deleteMember(long memberId) {
@@ -82,10 +80,10 @@ public class MemberService {
 
         return findMember;
     }
-    public Member findPostMember(){
+    public Member findAuthenticatedMember(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Member> optionalMember =  memberRepository.findByEmail(username);
-        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_NOT_FOUND));
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(NO_PERMISSION));
 
         return findMember;
     }
