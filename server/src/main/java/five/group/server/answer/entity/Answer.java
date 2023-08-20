@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,7 +52,7 @@ public class Answer {
     private List<Like> likes;
 
     public void addComment(Comment comment){
-        commentList.add(comment);
+        comments.add(comment);
     }
 
     public enum AnswerStatus {

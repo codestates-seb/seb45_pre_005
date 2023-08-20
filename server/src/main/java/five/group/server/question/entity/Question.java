@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,6 +28,10 @@ public class Question extends Auditable {
     @Column(nullable = false)
     private int viewCount = 0;
 
+
+    @Column(nullable = false)
+    private int answerCount;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_POSTED;
@@ -36,7 +41,7 @@ public class Question extends Auditable {
     private Member member;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<>();
 
     public void addAnswer(Answer answer){
         answers.add(answer);

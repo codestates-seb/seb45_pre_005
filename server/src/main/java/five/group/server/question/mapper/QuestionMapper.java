@@ -1,5 +1,8 @@
 package five.group.server.question.mapper;
 
+import five.group.server.answer.dto.AnswerDetailResponseDto;
+import five.group.server.member.dto.MemberGetResponseDto;
+import five.group.server.member.entity.Member;
 import five.group.server.question.dto.QuestionDto;
 import five.group.server.question.dto.QuestionGetDetailResponse;
 import five.group.server.question.entity.Question;
@@ -7,6 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
@@ -14,7 +18,6 @@ public interface QuestionMapper {
     Question questionPostDtoToQuestion(QuestionDto.Post requestBody);
     Question questionPatchDtoToQuestion(QuestionDto.Patch requestBody);
     List<QuestionDto.responsePage> questionsToQuestionList(List<Question> questionList);
-
     default QuestionDto.responsePage questionsToQuestionListDto(Question question) {
         QuestionDto.responsePage QuestionListDto =
                 QuestionDto.responsePage.builder()
@@ -27,7 +30,6 @@ public interface QuestionMapper {
         return QuestionListDto;
     }
 
-    // 답변이 존재할 경우 답변 response 를 담아서 반환하는 로직 구현 필요
     default QuestionGetDetailResponse questionToQuestionResponseDto(Question question) {
         QuestionGetDetailResponse questionResponseDto =
                 QuestionGetDetailResponse.builder()

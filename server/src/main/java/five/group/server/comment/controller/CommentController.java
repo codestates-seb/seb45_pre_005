@@ -1,5 +1,7 @@
 package five.group.server.comment.controller;
 
+import five.group.server.answer.dto.AnswerResponseDto;
+import five.group.server.answer.entity.Answer;
 import five.group.server.comment.dto.CommentDto;
 import five.group.server.comment.entity.Comment;
 import five.group.server.comment.mapper.CommentMapper;
@@ -32,7 +34,13 @@ public class CommentController {
 
         Comment comment = commentMapper.commentPostDtoToComment(requestBody);
 
+
         commentService.createComment(comment, requestBody.getAnswerId());
+
+        Long answerId = requestBody.getAnswerId();
+
+        commentService.createComment(comment, answerId);
+
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -40,25 +48,14 @@ public class CommentController {
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive Long commentId,
                                        @Valid @RequestBody CommentDto.Patch requestBody){
 
-        requestBody.setCommentId(commentId);
+        Comment comment = commentMapper.commentPatchDtoToComment(requestBody);
 
-        Comment updateComment =
-                commentService.updateComment(commentMapper.commentPatchDtoToComment(requestBody));
+        comment.setCommentId(commentId);
 
-//        Comment comment = commentMapper.commentPatchDtoToComment(requestBody);
-//
-//        Comment updateComment = commentService.updateComment(comment);
+        Comment updateComment = commentService.updateComment(comment);
 
         return new ResponseEntity<>(commentMapper.commentToCommentResponse(updateComment), HttpStatus.OK);
     }
-
-    // 댓글의 개별 조회 기능이 필요한가 확인
-//    @GetMapping("/{comment-id}")
-//    public ResponseEntity getComment(@PathVariable("comment-id") @Positive Long commentId) {
-//        Comment comment = commentService.getComment(commentId);
-//
-//        return new ResponseEntity<>(commentMapper.commentToCommentResponse(comment), HttpStatus.OK);
-//    }
 
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive Long commentId){

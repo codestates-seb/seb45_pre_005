@@ -1,10 +1,7 @@
 package five.group.server.answer.controller;
 
 
-import five.group.server.answer.dto.AnswerPatchDto;
-import five.group.server.answer.dto.AnswerPostDto;
-import five.group.server.answer.dto.AnswerDetailResponseDto;
-import five.group.server.answer.dto.AnswerResponseDto;
+import five.group.server.answer.dto.*;
 import five.group.server.answer.entity.Answer;
 import five.group.server.answer.mapper.AnswerMapper;
 import five.group.server.answer.service.AnswerService;
@@ -27,7 +24,9 @@ public class AnswerController {
     private final AnswerMapper answerMapper;
     private final CommentService commentService;
 
+
     public AnswerController(AnswerService answerService, AnswerMapper answerMapper,CommentService commentService) {
+
         this.answerService = answerService;
         this.answerMapper = answerMapper;
         this.commentService = commentService;
@@ -51,6 +50,7 @@ public class AnswerController {
 
         return new ResponseEntity(response,HttpStatus.OK);
     }
+
 //    @GetMapping("/{answer-id}")
 //    public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive Long answerId){
 //        Answer answer = answerService.getAnswer(answerId);
@@ -59,6 +59,7 @@ public class AnswerController {
 //
 //        return new ResponseEntity(response, HttpStatus.OK);
 //    }
+
     @DeleteMapping("/{answer-id}")
     public ResponseEntity deleteAnswer(@PathVariable("answer-id") Long answerId){
 

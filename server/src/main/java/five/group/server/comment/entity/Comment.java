@@ -4,6 +4,7 @@ import five.group.server.answer.entity.Answer;
 import five.group.server.audit.Auditable;
 import five.group.server.member.entity.Member;
 import five.group.server.question.entity.Question;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,12 @@ public class Comment extends Auditable {
 
     @Column(nullable = false)
     private String content;
+
+    @Column(updatable = false)
+    private LocalDateTime createAt = LocalDateTime.now();
+
+    @Column
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)

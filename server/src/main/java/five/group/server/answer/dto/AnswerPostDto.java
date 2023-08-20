@@ -18,5 +18,7 @@ public class AnswerPostDto {
     @NotBlank(message = "답변 내용을 입력해주세요")
     @Size(max = 200 ,message = "답변은 최대 200자 입니다." )
     private String content;
-
+    @Positive
+    private Long questionId;
+  
 }

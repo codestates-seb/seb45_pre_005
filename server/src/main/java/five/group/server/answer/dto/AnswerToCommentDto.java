@@ -1,7 +1,6 @@
 package five.group.server.answer.dto;
 
 import five.group.server.comment.dto.CommentDetailResponseDto;
-import five.group.server.comment.repository.CommentRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +13,11 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-public class AnswerDetailResponseDto {
-
+public class AnswerToCommentDto {
     private String nickname;
     private String title;
     private String content;
     private LocalDateTime createAt;
 
-    private List<CommentDetailResponseDto> commentList;
-
+    private List<CommentDetailResponseDto> comments;
 }
