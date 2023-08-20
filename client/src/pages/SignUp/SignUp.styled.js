@@ -4,6 +4,7 @@ export const SignUpContainer = styled.div`
   display: flex;
   padding-top: 60px;
   width: 100%;
+  height: 100vh;
   font-size: 13px;
   background-color: hsl(210,8%,95%);
   justify-content: center;
@@ -50,7 +51,8 @@ export const LeftText = styled.section`
 
 // 회원가입 박스
 export const FormContainer = styled.div`
-  max-width: 24.31em; 
+  max-width: 24.31em;
+  min-width: 24.31em;
   background-color: white;
   padding: 24px;
   margin-bottom: 24px;
