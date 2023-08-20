@@ -50,6 +50,7 @@ public class QuestionDto {
         private String title;
         private String content;
         private String nickname;
+        private int answerCount;
         private LocalDateTime createdAt;
     }
 }

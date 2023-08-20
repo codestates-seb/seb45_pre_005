@@ -26,7 +26,7 @@ public class MemberService {
     private final MemberAuthority memberAuthority;
 
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder,MemberAuthority memberAuthority) {
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, MemberAuthority memberAuthority) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.memberAuthority = memberAuthority;
@@ -48,6 +48,7 @@ public class MemberService {
 
         Member findMember = findAuthenticatedMember();
 
+
         Optional.ofNullable(member.getNickname())
                 .ifPresent(nickName -> findMember.setNickname(nickName));
 
@@ -59,9 +60,10 @@ public class MemberService {
         return findAuthenticatedMember();
     }
 
-    public void deleteMember(long memberId) {
+    public void deleteMember() {
 
-        Member findMember = findVerifyMember(memberId);
+        Member findMember = findAuthenticatedMember();
+
         findMember.setMemberStatus(MEMBER_QUIT);
     }
 
@@ -70,22 +72,19 @@ public class MemberService {
         if (member.isPresent()) throw new BusinessLogicException(MEMBER_EXIST);
     }
 
-    private Member findVerifyMember(long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_NOT_FOUND));
-
-        if (findMember.getMemberStatus().getStatus().equals("QUIT")) {
-            throw new BusinessLogicException(MEMBER_DELETED);
-        }
+    public Member findAuthenticatedMember() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<Member> optionalMember = memberRepository.findByEmail(username);
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(NO_PERMISSION));
+        isMemberDeleted(findMember);
 
         return findMember;
     }
-    public Member findAuthenticatedMember(){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<Member> optionalMember =  memberRepository.findByEmail(username);
-        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(NO_PERMISSION));
+    private void isMemberDeleted(Member member){
+        if(member.getMemberStatus().equals(MEMBER_QUIT)){
+            throw new BusinessLogicException(MEMBER_DELETED);
+        }
 
-        return findMember;
     }
 
 }

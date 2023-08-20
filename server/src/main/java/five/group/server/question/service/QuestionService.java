@@ -52,7 +52,6 @@ public class QuestionService {
     public Question updateQuestion(Question question) {
         Question findQuestion = findVerifiedQuestion(question.getQuestionId());
         verifyAuthorization(findQuestion);
-        isQuestionDeleted(findQuestion);
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(title -> findQuestion.setTitle(title));
@@ -82,7 +81,7 @@ public class QuestionService {
     public void deleteQuestion(Long questionId) {
         Question findQuestion = findVerifiedQuestion(questionId);
         verifyAuthorization(findQuestion);
-        isQuestionDeleted(findQuestion);
+
         findQuestion.setQuestionStatus(Question.QuestionStatus.QUESTION_DELETE);
 
     }
@@ -91,10 +90,8 @@ public class QuestionService {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         Question findQuestion = optionalQuestion.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+        isQuestionDeleted(findQuestion);
 
-        if (findQuestion.getQuestionStatus().getStatus().equals("QUESTION_DELETE")) {
-            throw new BusinessLogicException(QUESTION_DELETED);
-        }
         return findQuestion;
     }
 
@@ -106,6 +103,7 @@ public class QuestionService {
                         question.getTitle(),
                         question.getContent(),
                         question.getMember().getNickname(),
+                        question.getAnswers().size(),
                         question.getCreatedAt())
 
                 ).collect(Collectors.toList());

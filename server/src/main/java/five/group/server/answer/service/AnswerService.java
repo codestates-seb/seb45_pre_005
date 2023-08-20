@@ -61,7 +61,6 @@ public class AnswerService {
     public Answer updateAnswer(Answer answer) {
         Answer findAnswer = findVerifiedAnswer(answer.getAnswerId());
         verifyAuthorization(findAnswer);
-        isAnswerDeleted(findAnswer);
 
         Optional.ofNullable(answer.getTitle())
                 .ifPresent(title -> findAnswer.setTitle(title));
@@ -118,9 +117,11 @@ public class AnswerService {
     }
 
     public void deleteAnswer(Long answerId) {
+
         Answer findAnswer = findVerifiedAnswer(answerId);
         verifyAuthorization(findAnswer);
-        isAnswerDeleted(findAnswer);
+        findVerifiedAnswer(answerId);
+
         findAnswer.setAnswerStatus(Answer.AnswerStatus.ANSWER_DELETED);
     }
 
@@ -129,6 +130,8 @@ public class AnswerService {
         Answer findAnswer = optionalAnswer.orElseThrow(() ->
                 new BusinessLogicException(ANSWER_NOT_FOUND));
         isAnswerDeleted(findAnswer);
+        questionService.findVerifiedQuestion(findAnswer.getQuestion().getQuestionId());
+
 
         return findAnswer;
     }
@@ -138,7 +141,7 @@ public class AnswerService {
         int answerCount = findQuestion.getAnswers().stream()
                 .filter(answers -> answers.getAnswerStatus() == Answer.AnswerStatus.ANSWER_POSTED)
                 .collect(Collectors.toList()).size();
-        if (answerCount > 10) {
+        if (answerCount == 10) {
             throw new BusinessLogicException(ANSWER_CANT_POST);
         }
     }
