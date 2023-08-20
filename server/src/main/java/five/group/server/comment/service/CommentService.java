@@ -45,6 +45,7 @@ public class CommentService {
 
     public Comment updateComment(Comment comment) {
         Comment findComment = findVerifiedComment(comment.getCommentId());
+        answerService.findVerifiedAnswer(findComment.getAnswer().getAnswerId());
         verifyAuthorization(findComment);
 
 
@@ -75,6 +76,7 @@ public class CommentService {
     }
     public void deleteComment (Long commentId) {
         Comment findComment = findVerifiedComment(commentId);
+        answerService.findVerifiedAnswer(findComment.getAnswer().getAnswerId());
         verifyAuthorization(findComment);
         commentRepository.delete(findComment);
     }

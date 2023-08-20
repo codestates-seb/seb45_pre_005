@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class AnswerController {
     }
     @PatchMapping("/{answer-id}")
     public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive Long answerId,
-                                      @RequestBody AnswerPatchDto patchDto){
+                                      @Valid @RequestBody AnswerPatchDto patchDto){
         Answer answer = answerMapper.patchDtoToEntity(patchDto);
         answer.setAnswerId(answerId);
         Answer updateAnswer = answerService.updateAnswer(answer);

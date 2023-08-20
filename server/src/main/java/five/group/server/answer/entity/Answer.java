@@ -1,6 +1,7 @@
 package five.group.server.answer.entity;
 
 import five.group.server.comment.entity.Comment;
+import five.group.server.likes.entity.Like;
 import five.group.server.member.entity.Member;
 import five.group.server.question.entity.Question;
 import lombok.*;
@@ -37,12 +38,17 @@ public class Answer {
     @JoinColumn(name = "questionId")
     private Question question;
 
-    @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
-    private List<Comment> commentList;
-
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
+
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
+
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
+    private List<Like> likes;
 
     public void addComment(Comment comment){
         commentList.add(comment);

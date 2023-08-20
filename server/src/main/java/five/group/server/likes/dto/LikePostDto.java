@@ -1,4 +1,4 @@
-package five.group.server.likes;
+package five.group.server.likes.dto;
 
 import lombok.Getter;
 import lombok.Setter;

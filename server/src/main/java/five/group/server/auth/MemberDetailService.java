@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.Optional;
 
+import static five.group.server.exception.ExceptionCode.MEMBER_DELETED;
 import static five.group.server.exception.ExceptionCode.MEMBER_NOT_FOUND;
 
 @Component
@@ -29,6 +30,9 @@ public class MemberDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(MEMBER_NOT_FOUND));
+        if(findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_QUIT)){
+            throw new BusinessLogicException(MEMBER_DELETED);
+        }
 
         return new MemberDetails(findMember);
     }
