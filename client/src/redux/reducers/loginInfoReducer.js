@@ -10,14 +10,13 @@ const initialState = {
 export const loginReducer = ( state = initialState, action ) => {
     switch (action.type) {
         case LOGIN:
-            return action.payload;
-                //   return {
-                // ...state,
-                // isLoggedIn: action.payload.isLoggedIn,
-                // accessToken: action.payload.accessToken,
-                // refreshToken: action.payload.refreshToken,
-                // userId: action.payload.userId
-                //   };
+            return {
+                ...state,
+                isLoggedIn: action.payload.isLoggedIn,
+                accessToken: action.payload.accessToken,
+                refreshToken: action.payload.refreshToken,
+                userId: action.payload.userId
+            };
         case LOGOUT:
             return {
                 ...state,
@@ -29,7 +28,7 @@ export const loginReducer = ( state = initialState, action ) => {
         case SET_LOGIN_STATUS:
             return {
                 ...state,
-                isLoggedIn: action.payload
+                isLoggedIn: action.payload.isLoggedIn
                 }
         default: 
             return state;
