@@ -10,9 +10,9 @@ import {
   InputForm
 } from './Header.styled';
 import headerLogoImg from '../../common/image/header-logo.png';
-
 import Search from '../../common/image/Search.png'
 import profile from '../../common/image/profile.png'
+
 import { logout, setLoginStatus } from '../../redux/actions/loginInfo'
 
 
@@ -44,7 +44,6 @@ export default function Header() {
       console.log(loginStatus)
     }
   }, []);
-
 
   return (
     <HeaderContainer>
