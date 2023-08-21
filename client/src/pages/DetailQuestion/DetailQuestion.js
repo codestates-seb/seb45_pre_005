@@ -35,6 +35,9 @@ export default function DetailQuestion() {
   const [question, setQuestion] = useState({});
   const [answers, setAnswers] = useState([]);
 
+  const [title, setTitle] = useState();
+  const [content, setContent] = useState();
+
   const dispatch = useDispatch();
   const questionEditFlag = useSelector((state) => state.questionReducer);
 
@@ -54,20 +57,56 @@ export default function DetailQuestion() {
       .then((data) => {
         setQuestion(data.data);
         setAnswers(data.list);
+        setTitle(data.data.title);
+        setContent(data.data.content);
       })
       .catch((error) => console.log(error));
   }, []);
 
   console.log(question);
   console.log(answers);
+
   // const handleQuestionEditFlag = () => {
   //   dispatch(questionEdit(true));
   //   console.log(questionEditFlag);
   // };
 
-  function submitQuestionPatch() {
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const handleBodyChange = (html) => {
+    setContent(html);
+  };
+  const htmlToText = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  };
+
+  const submitQuestionPatch = async () => {
+    if (!title || htmlToText(content).length < 20) {
+      return;
+    }
+
+    const data = {
+      title: title,
+      content: content
+    };
+
+    await fetch(`${BASE_URL}/questions/${question.questionId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W10sInVzZXJuYW1lIjoidGVzdEB0ZXN0Iiwic3ViIjoidGVzdEB0ZXN0IiwiZXhwIjoxNjkyNjAzODIxfQ.O8y5exaF2ijlNUslC-6Zh70yz3ah0B4JiI7mcg9hgy8`
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+      mode: 'cors'
+    }).then((res) => console.log(res));
+
     dispatch(endQuestionEdit(false));
-  }
+  };
 
   return (
     <BaseContainer>
@@ -76,7 +115,11 @@ export default function DetailQuestion() {
         <DetailContainer>
           <DetailHeader>
             {questionEditFlag ? (
-              <input type="text" defaultValue={question.title} />
+              <input
+                type="text"
+                defaultValue={title}
+                onChange={handleTitleChange}
+              />
             ) : (
               <h1>{question.title}</h1>
             )}
@@ -84,7 +127,7 @@ export default function DetailQuestion() {
             <div className="header-desc-container">
               <div>
                 <span>Asked</span>
-                <span>{dateFormat(question.createdAt)}</span>
+                <span>{question.createdAt}</span>
               </div>
               <div>
                 <span>Modified</span>
@@ -109,7 +152,7 @@ export default function DetailQuestion() {
             </AnswerLikeContainer>
             <div className="detail-wrap">
               {questionEditFlag ? (
-                <Editor value={question.content} />
+                <Editor value={content} onChange={handleBodyChange} />
               ) : (
                 <div
                   className="innerHtml"
@@ -129,7 +172,7 @@ export default function DetailQuestion() {
                         </button>
                         <button
                           className="submit-btn"
-                          onClick={() => submitQuestionPatch()}
+                          onClick={submitQuestionPatch}
                         >
                           Submit
                         </button>
