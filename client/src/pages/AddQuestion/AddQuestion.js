@@ -1,20 +1,19 @@
-// TODO: Discard Question 모달 만들기
+// TODO: Discard Question 모달
 import { useState } from 'react';
 import Footer from '../../components/Footer/Footer';
 import { BaseContainer, BaseWrap } from '../../style/Global.styled';
 import { AddQuestionContainer } from './AddQuestion.styled';
-import QuestionGuide from './QuestionGuide/QuestionGuide';
-import InputGuide from './InputGuide/InputGuide';
-import InputForm from './InputForm/InputForm';
-import { inputGuideProps, inputFormProps } from './PropsData';
+import QuestionGuide from '../../components/QuestionGuide/QuestionGuide';
+import InputGuide from '../../components/InputGuide/InputGuide';
+import InputForm from '../../components/InputForm/InputForm';
+import { inputGuideProps, inputFormProps } from '../../common/data/AddQuestionPropsData';
 
 export default function AddQuestion() {
   const [focusedInput, setFocusedInput] = useState(null);
   const [inputTitle, setInputTitle] = useState('');
   const [inputBody, setInputBody] = useState('');
-  const [inputTag, setInputTag] = useState('');
-  const [tags, setTags] = useState([]);
-
+  // const [inputTag, setInputTag] = useState('');
+  // const [tags, setTags] = useState([]);
 
   const handleTitleChange = (event) => {
     setInputTitle(event.target.value);
@@ -24,32 +23,32 @@ export default function AddQuestion() {
     setInputBody(html);
   }
 
-  const handleTagChange = (event) => {
-    setInputTag(event.target.value);
-  }
+  // const handleTagChange = (event) => {
+  //   setInputTag(event.target.value);
+  // }
 
-  const handleTagAdd = (event) => {
-    if (event.key === 'Enter' || event.key === ',') {
-      event.preventDefault();
-      const newTag = inputTag.trim();
-      if (newTag && !tags.includes(newTag) && tags.length < 5) {
-        setTags([...tags, newTag]);
-      }
-      setInputTag('');
-    }
-  }
+  // const handleTagAdd = (event) => {
+  //   if (event.key === 'Enter' || event.key === ',') {
+  //     event.preventDefault();
+  //     const newTag = inputTag.trim();
+  //     if (newTag && !tags.includes(newTag) && tags.length < 5) {
+  //       setTags([...tags, newTag]);
+  //     }
+  //     setInputTag('');
+  //   }
+  // }
 
-  const handleTagDelete = (event) => {
-    const newTags = tags.filter((tag) => tag !== event.target.innerText);
-    console.log(newTags);
-    setTags(newTags);
-  }
+  // const handleTagDelete = (event) => {
+  //   const newTags = tags.filter((tag) => tag !== event.target.innerText);
+  //   console.log(newTags);
+  //   setTags(newTags);
+  // }
 
   const handleAllInputDelete = () => {
     setInputTitle('');
     setInputBody('');
-    setInputTag('');
-    setTags([]);
+    // setInputTag('');
+    // setTags([]);
   }
 
   const htmlToText = (html) => {
@@ -59,24 +58,29 @@ export default function AddQuestion() {
   }
 
   const handleSubmit = async () => {
-    if (!inputTitle || htmlToText(inputBody).length < 20 || !tags.length) {
+    if (!inputTitle || htmlToText(inputBody).length < 20) {
       console.log('Input Validation failed.');
       return;
     }
 
     const data = {
       title: inputTitle,
-      contents: inputBody,
-      tags: tags
+      content: inputBody
+      // email: 'test@test',
+      // password: "11bb22aa!!"
+      // nickname: "test2",
+      // email: "test@gmail.com",
+      // password: "test1234!"
     };
 
     console.log(data);
 
     try {
-      const response = await fetch('/questions', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/questions`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': process.env.REACT_APP_AUTH_TOKEN
         },
         body: JSON.stringify(data),
         credentials: 'include',
@@ -87,16 +91,17 @@ export default function AddQuestion() {
         console.log('Question Submission Success.');
         setInputTitle('');
         setInputBody('');
-        setTags([]);
+        console.log(response);
+        window.location.href = '/';
       } else {
-        console.log('Question Submission Error.');
+        console.log('Question Submission Failed.');
       }
     } catch (error) {
       console.error(error);
     }
   }
 
-  const isSubmitButtonDisabled = !inputTitle || htmlToText(inputBody).length < 20 || !tags.length;
+  const isSubmitButtonDisabled = !inputTitle || htmlToText(inputBody).length < 20;
 
   return (
     <BaseContainer>
@@ -129,7 +134,7 @@ export default function AddQuestion() {
               <InputGuide data={inputGuideProps[focusedInput]} />}
           </div>
 
-          <div className='flex-box'>
+          {/* <div className='flex-box'>
             <InputForm
               {...inputFormProps.tag}
               onFocus={() => setFocusedInput('tag')}
@@ -141,7 +146,7 @@ export default function AddQuestion() {
             />
             {focusedInput === 'tag' &&
               <InputGuide data={inputGuideProps[focusedInput]} />}
-          </div>
+          </div> */}
 
           <button
             type='submit'
