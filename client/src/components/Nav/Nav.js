@@ -10,31 +10,36 @@ export default function Nav({ tabNum }) {
 
   return (
     <NavContainer>
-      <NavLinkContainer
-        to="/"
-        selected={selectNav}
-        tabNum={1}
-        onClick={() => handleNavClick(1)}
-      >
-        <img src={selectNav === 1 ? homeTabOnImg : homeTabOffImg} alt="home" />
-        Home
-      </NavLinkContainer>
-      <NavLinkContainer
-        to="/"
-        selected={selectNav}
-        tabNum={2}
-        onClick={() => handleNavClick(2)}
-      >
-        Tags
-      </NavLinkContainer>
-      <NavLinkContainer
-        to="../my-page"
-        selected={selectNav}
-        tabNum={3}
-        onClick={() => handleNavClick(3)}
-      >
-        Users
-      </NavLinkContainer>
+      <div className="sticky-nav">
+        <NavLinkContainer
+          to="/"
+          selected={selectNav}
+          tabnum={1}
+          onClick={() => handleNavClick(1)}
+        >
+          <img
+            src={selectNav === 1 ? homeTabOnImg : homeTabOffImg}
+            alt="home"
+          />
+          Home
+        </NavLinkContainer>
+        <NavLinkContainer
+          to="/"
+          selected={selectNav}
+          tabnum={2}
+          onClick={() => handleNavClick(2)}
+        >
+          Tags
+        </NavLinkContainer>
+        <NavLinkContainer
+          to="../my-page"
+          selected={selectNav}
+          tabnum={3}
+          onClick={() => handleNavClick(3)}
+        >
+          Users
+        </NavLinkContainer>
+      </div>
     </NavContainer>
   );
 }

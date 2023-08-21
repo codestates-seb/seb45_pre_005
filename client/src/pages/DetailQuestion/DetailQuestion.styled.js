@@ -11,6 +11,7 @@ export const DetailHeader = styled.div`
   margin-bottom: 16px;
   border-bottom: 1px solid var(--gray-10);
 
+  input,
   h1 {
     font-size: 27px;
     margin-bottom: 8px;
@@ -29,6 +30,34 @@ export const DetailHeader = styled.div`
   .header-desc-container div span:first-child {
     color: var(--gray);
     margin-right: 5px;
+  }
+
+  > input {
+    padding: 5px;
+    border: 1px solid hsl(210, 8%, 75%);
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+    &:focus {
+      border: 1px solid #59a4de;
+      box-shadow: 0px 0px 0px 4px #d9eaf7;
+      outline: none;
+      transition: none;
+    }
+  }
+`;
+
+export const DetailContent = styled.div`
+  display: flex;
+  align-items: flex-start;
+  .detail-wrap {
+    width: 100%;
+  }
+  .ql-toolbar {
+    margin-top: 0;
+  }
+  .ql-container {
+    min-height: 20em;
   }
 `;
 
@@ -63,12 +92,29 @@ export const DescContainer = styled.div`
     margin-right: 10px;
     color: var(--gray);
   }
+
+  button:hover {
+    color: var(--gray-20);
+  }
+
+  .submit-btn {
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .submit-btn:hover {
+    color: var(--white) !important;
+    background-color: var(--blue-hover);
+  }
 `;
 
 export const DetailUserContainer = styled.div`
   padding: 7px;
   font-size: 13px;
-  background-color: ${(props) => (props.author ? 'var(--sky-blue)' : '')};
+  background-color: ${(props) =>
+    props.$author === 'true' ? 'var(--sky-blue)' : ''};
   min-width: 200px;
   border-radius: 3px;
   span {
@@ -123,5 +169,12 @@ export const AnswerFormContainer = styled.div`
     &:hover {
       background-color: var(--blue-hover);
     }
+  }
+  .ql-container {
+    min-height: 20em;
+  }
+  .ql-toolbar.ql-snow {
+    margin: 0;
+    padding: 0;
   }
 `;

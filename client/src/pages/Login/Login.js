@@ -1,8 +1,10 @@
-import { Link , useNavigate } from 'react-router-dom';
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { 
+import {
   LoginContainer,
   LoginWrap,
   LoginBox,
@@ -11,101 +13,124 @@ import {
   InputForm,
   ErrorMsg,
   SignUpBtn,
-  LinkTo,
+  LinkTo
 } from './Login.styled';
-import logo from  '../../common/image/logo.ico'
+import logo from '../../common/image/logo.ico';
 import { login } from '../../redux/actions/loginInfo';
+
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const loginReducer = useSelector((state) => state.loginReducer); // 추가됨
 
-  const [ loginInfo, setLoginInfo ] = useState({
+  const [loginInfo, setLoginInfo] = useState({
     email: '',
-    password: '',
+    password: ''
   });
-  const [ errors, setErrors ] = useState([]);
+  const [errors, setErrors] = useState([]);
 
   const handleInputValue = (field, value) => {
-    setLoginInfo({ ...loginInfo, [field]: value})
-  }
+    setLoginInfo({ ...loginInfo, [field]: value });
+  };
 
   const handleLogin = (e) => {
+    // const accessToken = 'act123';
+    // const refreshToken = 'rft456';
+    const userId = '2asd123sdc';
+    const isLoggedIn = true;
+
+    // localStorage.setItem('accessToken', accessToken);
+    // localStorage.setItem('refreshToken', refreshToken);
+    // localStorage.setItem('userId', userId);
+
+    // // 로그인 상태 변경
+    // dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
+    // navigate('/');
+    // console.log(loginReducer);
+    // console.log(login(isLoggedIn, accessToken, refreshToken, userId));
+
     e.preventDefault();
     setErrors([]);
 
-    const regExpEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    
-    if(!loginInfo.email) {
-      setErrors((prevErrors) => [...prevErrors, 'Email_empty'])
-    } else if(!regExpEmail.test(loginInfo.email)) {
-      setErrors((prevErrors) => [...prevErrors, 'Email_invaild'])
+    const regExpEmail =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+    if (!loginInfo.email) {
+      return setErrors((prevErrors) => [...prevErrors, 'Email_empty']);
+    } else if (!regExpEmail.test(loginInfo.email)) {
+      return setErrors((prevErrors) => [...prevErrors, 'Email_invaild']);
     }
-    
-    if(!loginInfo.password) {
-      setErrors((prevErrors) => [...prevErrors, 'Password_empty'])
-    } else if (errors.length === 0) {
-        fetch(`/members`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(loginInfo),
-        })
-        .then(res => {
-          // 응답에 엑세스 토근이 있거나 리프레시 토큰이 있으면, 
-          if (res.headers.get('Authorization') && res.headers.get('Refresh')) { 
-              const accessToken = res.headers.get('Authorization').split(' ')[1]; // Bearer를 건너뛰고 실제 토큰 부분을 추출
-              const refreshToken = res.headers.get('Refresh')
 
-              res.json().then((data) => {
-                const { memberId } = data;
-                console.log(memberId)
+    if (!loginInfo.password) {
+      return setErrors((prevErrors) => [...prevErrors, 'Password_empty']);
+    } else {
+      fetch(`${BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginInfo),
+        credentials: 'include',
+        mode: 'cors'
+      })
+        .then((res) => {
+          // 응답에 엑세스 토근이 있거나 리프레시 토큰이 있으면,
+          //res.headers.get('Authorization') && res.headers.get('Refresh')
+          if (res.status === 200) {
+            const accessToken = res.headers.get('Authorization'); // .split(' ')[1];
+            const refreshToken = res.headers.get('Refresh');
+            console.log(res);
+            console.log(accessToken);
+            console.log(refreshToken);
+            // res.json().then((data) => {
+            // const { userId } = res.userId;
 
-                // 토큰 저장
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('refreshToken', refreshToken); // 리프레시 토큰을 클라이언트에 저장??
-                localStorage.setItem('memberId', memberId);
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
 
-                // 로그인 상태 변경
-                dispatch(login({ accessToken, refreshToken, memberId }));
-                
-                // 메인페이지로 이동
-                navigate('/');
-              });
-              return 
-            } else {
-              // 좀더 디테일한 로그인 실패 로직 생각해보기. 비밀번호 틀림, 없는 이메일.
+            dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
+            console.log(login(isLoggedIn, accessToken, refreshToken, userId));
+            console.log(loginInfo);
+            console.log('로그인에 성공했습니다.');
+            navigate('/');
+            // });
+          } else if (res.status === 401) {
             console.log('로그인에 실패했습니다.');
+            console.log(res);
+            setErrors((prevErrors) => [
+              ...prevErrors,
+              'Email_Or_Password_invaild'
+            ]);
           }
-          }) 
-        .catch(error => {
-          console.log('에러', error);
+        })
+        .catch((err) => {
+          console.log('에러.', err);
         });
-      }
     }
+  };
 
   return (
     <LoginContainer>
       <LoginWrap>
         <LoginBox>
           <LogoImg>
-            <Link to='/'>
-              <img src={logo} alt='logo'></img>
+            <Link to="/">
+              <img src={logo} alt="logo"></img>
             </Link>
           </LogoImg>
 
           <FormContainer>
-            <form >
+            <form>
               <InputForm>
-                <label htmlFor='email'>Email</label>
-                <input 
-                  type='text' 
-                  id='email' 
-                  value={loginInfo.email} 
-                  onChange={(e) => handleInputValue("email", e.target.value)}
-                  >
-                </input>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  value={loginInfo.email}
+                  onChange={(e) => handleInputValue('email', e.target.value)}
+                ></input>
                 {errors.includes('Email_empty') && (
                   <ErrorMsg>Email cannot be empty.</ErrorMsg>
                 )}
@@ -114,32 +139,37 @@ export default function Login() {
                 )}
               </InputForm>
               <InputForm>
-                <label htmlFor='password'>Password</label>
-                <input 
-                  type='password' 
-                  id='password' 
-                  value={loginInfo.password} 
-                  onChange={(e) => handleInputValue("password", e.target.value)}
-                  >
-                </input>
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={loginInfo.password}
+                  onChange={(e) => handleInputValue('password', e.target.value)}
+                ></input>
                 {errors.includes('Password_empty') && (
                   <ErrorMsg>Password cannot be empty.</ErrorMsg>
                 )}
-                {errors.includes('Password_invaild') && (
-                  <ErrorMsg>This password is not vaild.</ErrorMsg>
+                {errors.includes('Email_Or_Password_invaild') && (
+                  <ErrorMsg>Email or password is incorrect.</ErrorMsg>
                 )}
               </InputForm>
             </form>
             <SignUpBtn>
-              <button type="submit" onClick={handleLogin}>Sign Up</button>
+              <button type="submit" onClick={handleLogin}>
+                Log in
+              </button>
             </SignUpBtn>
           </FormContainer>
           <LinkTo>
-            <div>Don’t have an account?&nbsp;
-              <a href='/sign-up'>Sign up</a>
+            <div>
+              Don’t have an account?&nbsp;
+              <a href="/sign-up">Sign up</a>
             </div>
-            <div>Are you an employer?&nbsp;
-              <a href='https://talent.stackoverflow.com/users/login'>Sign up on Talent</a>
+            <div>
+              Are you an employer?&nbsp;
+              <a href="https://talent.stackoverflow.com/users/login">
+                Sign up on Talent
+              </a>
             </div>
           </LinkTo>
         </LoginBox>
