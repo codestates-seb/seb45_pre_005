@@ -10,9 +10,9 @@ import {
   InputForm
 } from './Header.styled';
 import headerLogoImg from '../../common/image/header-logo.png';
-
-import Search from  '../../common/image/Search.png'
+import Search from '../../common/image/Search.png'
 import profile from '../../common/image/profile.png'
+
 import { logout, setLoginStatus } from '../../redux/actions/loginInfo'
 
 
@@ -36,7 +36,7 @@ export default function Header() {
   useEffect(() => {
     console.log(loginStatus);
     const storedAccessToken = localStorage.getItem('accessToken')
-    if(storedAccessToken) {
+    if (storedAccessToken) {
       dispatch(setLoginStatus(true))
       console.log(loginStatus)
     } else {
@@ -74,7 +74,7 @@ export default function Header() {
               <li>
                 <Btn className='myPageBtn' to="/my-page">
                   <img src={profile} alt='profile'></img>
-                  </Btn>
+                </Btn>
               </li>
               <li>
                 <Btn className='logouBtn' onClick={handleLogout}>Log out</Btn>

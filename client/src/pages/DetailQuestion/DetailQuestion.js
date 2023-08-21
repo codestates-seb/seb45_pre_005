@@ -19,7 +19,7 @@ import likeUpImg from '../../common/image/like-up.png';
 import likeDownImg from '../../common/image/like-down.png';
 import Answer from '../../components/Answer/Answer';
 import { allData } from '../../common/data/detailQuestion';
-import Editor from '../AddQuestion/Editor/Editor';
+import Editor from '../../components/Editor/Editor';
 import { AnswerLikeContainer } from '../../components/Answer/Answer.styled';
 import { useSelector, useDispatch } from 'react-redux';
 import {

@@ -1,15 +1,20 @@
 import { styled } from 'styled-components';
 
 export const MainContainer = styled.div`
-  /* margin: 2rem 0; */
-  padding: 24px;
+  margin-bottom: 1rem 0 3rem 1rem;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  /* overflow: auto; */
 
   .flex-box {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid #e3e6e8;
-    padding-bottom: 1.3rem;
+    /* padding: 0 0 1.3rem 0; */
+    padding: 1.3rem;
   }
 
   h1 {
@@ -28,8 +33,8 @@ export const MainContainer = styled.div`
     color: #ffffff;
     padding: 10px;
     border-radius: 7px;
-    margin: 0 0.3rem;
-
+    /* margin: 0 0.3rem; */
+    
     &:hover {
       background-color: #0074cc;
     }

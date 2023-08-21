@@ -1,5 +1,8 @@
 import { styled } from 'styled-components';
 
 export const MyPageContainer = styled.div`
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: auto;
 `;

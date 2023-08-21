@@ -1,7 +1,10 @@
 import { PaginationContainer } from './Pagination.styled';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Pagination({ totalPages, curPage, onPageChange }) {
+  if (totalPages < 1) {
+    return <PaginationContainer />;
+  }
 
   function generatePageNumbers() {
     const pageNumbers = [];
@@ -30,9 +33,6 @@ export default function Pagination({ totalPages, curPage, onPageChange }) {
         for (let i = curPage - 2; i <= curPage + 2; i++) {
           pageNumbers.push(i);
         }
-        // pageNumbers.push(curPage - 1);
-        // pageNumbers.push(curPage);
-        // pageNumbers.push(curPage + 1);
         pageNumbers.push('...');
         pageNumbers.push(totalPages);
       }
@@ -44,54 +44,54 @@ export default function Pagination({ totalPages, curPage, onPageChange }) {
   return (
     <PaginationContainer>
       {curPage !== 1 &&
-        // <Link to={`/questions?page=${curPage - 1}`}>
-        <button
-          onClick={() => {
-            onPageChange(curPage - 1);
-            window.scrollTo(0, 0);
-          }}
-          disabled={curPage === 1}
-        >
-          Prev
-        </button>
-        // </Link>
+        <Link to={`/?page=${curPage - 1}`}>
+          <button
+            onClick={() => {
+              onPageChange(curPage - 1);
+              window.scrollTo(0, 0);
+            }}
+            disabled={curPage === 1}
+          >
+            Prev
+          </button>
+        </Link>
       }
 
       {generatePageNumbers().map((pageNumber, index) => (
-        // <Link
-        // key={index}
-        // to={`/questions?page=${pageNumber}`}
-        // >
-        <button
+        <Link
           key={index}
-          className={pageNumber === '...' ? 'not-number' : ''}
-          onClick={() => {
-            if (pageNumber !== '...') {
-              onPageChange(pageNumber);
-            }
-            window.scrollTo(0, 0);
-          }}
-          disabled={pageNumber === curPage || pageNumber === '...'}
+          to={`/?page=${pageNumber}`}
         >
-          {pageNumber}
-        </button>
-        // </Link>
+          <button
+            key={index}
+            className={pageNumber === '...' ? 'not-number' : ''}
+            onClick={() => {
+              if (pageNumber !== '...') {
+                onPageChange(pageNumber);
+              }
+              window.scrollTo(0, 0);
+            }}
+            disabled={pageNumber === curPage || pageNumber === '...'}
+          >
+            {pageNumber}
+          </button>
+        </Link>
       ))
       }
 
       {
         curPage !== totalPages &&
-        // <Link to={`/questions?page=${curPage + 1}`}>
-        <button
-          onClick={() => {
-            onPageChange(curPage + 1);
-            window.scrollTo(0, 0);
-          }}
-          disabled={curPage >= totalPages}
-        >
-          Next
-        </button>
-        // </Link>
+        <Link to={`/?page=${curPage + 1}`}>
+          <button
+            onClick={() => {
+              onPageChange(curPage + 1);
+              window.scrollTo(0, 0);
+            }}
+            disabled={curPage >= totalPages}
+          >
+            Next
+          </button>
+        </Link>
       }
     </PaginationContainer >
   );
