@@ -1,8 +1,6 @@
 package five.group.server.auth;
 
 
-import com.google.gson.Gson;
-import five.group.server.error.ErrorResponse;
 import five.group.server.error.HandlerErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
