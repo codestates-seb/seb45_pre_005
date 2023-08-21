@@ -3,9 +3,10 @@ import { styled } from 'styled-components';
 export const PaginationContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 2rem;
+  padding: 4rem 0 6rem 2.5rem;
 
   button {
+    margin: 0 0.2rem;
     font-size: 13px;
     padding: 0.3rem 0.6rem;
     border: 1px solid #d6d9dc;

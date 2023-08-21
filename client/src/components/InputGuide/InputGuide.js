@@ -3,7 +3,7 @@ import {
   InputGuideTitle,
   InputGuideBody
 } from '../InputGuide/InputGuide.styled';
-import PencilImg from '../../../common/image/AddQuestion/pencil.png';
+import PencilImg from '../../common/image/pencil.png';
 
 export default function InputGuide({ data }) {
   const { title, body } = data;
