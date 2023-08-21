@@ -4,6 +4,7 @@ import five.group.server.answer.entity.Answer;
 import five.group.server.answer.service.AnswerService;
 import five.group.server.comment.entity.Comment;
 import five.group.server.exception.BusinessLogicException;
+import five.group.server.likes.dto.LikePostDto;
 import five.group.server.likes.entity.Like;
 import five.group.server.likes.repository.LikeRepository;
 import five.group.server.member.entity.Member;
@@ -12,8 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static five.group.server.exception.ExceptionCode.LIKE_NOT_FOUND;
-import static five.group.server.exception.ExceptionCode.NO_AUTHORIZATION;
+import static five.group.server.exception.ExceptionCode.*;
 
 @Service
 public class LikesService {
@@ -27,12 +27,22 @@ public class LikesService {
         this.likeRepository = likeRepository;
     }
 
-    public Like createLike(Like like) {
+    public Like createLike(Long answerId) {
         Member findMember = memberService.findAuthenticatedMember();
-        like.setMember(findMember);
 
-        Answer findAnswer = answerService.findVerifiedAnswer(like.getAnswer().getAnswerId());
-        like.setAnswer(findAnswer);
+        Answer findAnswer = answerService.findVerifiedAnswer(answerId);
+
+        if (findAnswer.getLikes().stream()
+                .anyMatch(like -> like.getMember().getMemberId()
+                        == findMember.getMemberId()))
+        {
+            throw new BusinessLogicException(LIKE_ONLY_ONE_TIME);
+        }
+
+        Like like = Like.builder()
+                .member(findMember)
+                .answer(findAnswer)
+                .build();
 
         return likeRepository.save(like);
     }
@@ -52,7 +62,7 @@ public class LikesService {
         }
     }
 
-    private Like findVerifiedLike(long likeId){
+    private Like findVerifiedLike(long likeId) {
         Optional<Like> optional = likeRepository.findById(likeId);
         Like findLike = optional.orElseThrow(() -> new BusinessLogicException(LIKE_NOT_FOUND));
 

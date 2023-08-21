@@ -2,16 +2,15 @@ package five.group.server.likes.entity;
 
 import five.group.server.answer.entity.Answer;
 import five.group.server.member.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "likes")
 public class Like {
