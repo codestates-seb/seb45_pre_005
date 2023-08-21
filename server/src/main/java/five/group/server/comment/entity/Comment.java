@@ -1,6 +1,8 @@
 package five.group.server.comment.entity;
 
+import five.group.server.answer.entity.Answer;
 import five.group.server.audit.Auditable;
+import five.group.server.member.entity.Member;
 import five.group.server.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,8 +26,12 @@ public class Comment extends Auditable {
     private CommentStatus commentStatus = CommentStatus.COMMENT_POSTED;
 
     @ManyToOne
-    @JoinColumn(name = "questionId")
-    private Question question;
+    @JoinColumn(name = "answerId")
+    private Answer answer;
+
+    @ManyToOne
+    @JoinColumn(name = "memberId")
+    private Member member;
 
     public enum CommentStatus {
         COMMENT_POSTED("댓글 작성"),

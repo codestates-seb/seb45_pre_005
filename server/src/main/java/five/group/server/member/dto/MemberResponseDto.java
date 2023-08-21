@@ -13,5 +13,7 @@ import java.time.LocalDateTime;
 public class MemberResponseDto {
 
     private String nickname;
+    private LocalDateTime createAt;
+    private LocalDateTime modifiedAt;
 
 }

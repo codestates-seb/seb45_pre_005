@@ -1,7 +1,7 @@
-package five.group.server.jwt;
+package five.group.server.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import five.group.server.login.LoginDto;
+import five.group.server.member.login.LoginDto;
 import five.group.server.member.entity.Member;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package five.group.server.jwt;
+package five.group.server.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -19,13 +19,16 @@ import java.util.Map;
 @Component
 public class JwtTokenizer {
     @Getter
-    private String secretKey = "ehdals12341234123412341234123412341234";
+    @Value("${jwt.secretKey}")
+    private String secretKey;
 
     @Getter
-    private int accessTokenExpirationMinutes = 60;
+    @Value("${jwt.access-token-expiration-minutes}")
+    private int accessTokenExpirationMinutes;
 
     @Getter
-    private int refreshTokenExpirationMinutes = 600;
+    @Value("${jwt.refresh-token-expiration-minutes}")
+    private int refreshTokenExpirationMinutes;
 
     public String encodedBase64SecretKey(String secretKey){
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));

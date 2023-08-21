@@ -32,11 +32,10 @@ public class CommentController {
 
         Comment comment = commentMapper.commentPostDtoToComment(requestBody);
 
-        Comment createComment = commentService.createComment(comment);
+        commentService.createComment(comment, requestBody.getAnswerId());
 
-        return new ResponseEntity<>(commentMapper.commentToCommentResponse(createComment), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive Long commentId,
                                        @Valid @RequestBody CommentDto.Patch requestBody){
