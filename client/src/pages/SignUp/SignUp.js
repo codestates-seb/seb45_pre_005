@@ -1,9 +1,11 @@
+/* eslint-disable no-undef */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { 
   SignUpContainer, 
   SignUpWrap,
+  // eslint-disable-next-line no-unused-vars
+  hiddenText,
   FormContainer,
   LeftText, 
   SignUpInputForm,
@@ -11,14 +13,13 @@ import {
   SignUpBtn,
   LinkTo,
 } from './SignUp.styled';
-
 import signup_1 from '../../common/image/signup_1.png'
 import signup_2 from '../../common/image/signup_2.png'
 import signup_3 from '../../common/image/signup_3.png'
 import signup_4 from '../../common/image/signup_4.png'
 
-
 export default function SignUp() {
+  // const BASE_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate()
 
   const [ signupInfo, setSignupInfo ] = useState({
@@ -33,7 +34,7 @@ export default function SignUp() {
     setSignupInfo({ ...signupInfo, [field]: value})
   }
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setErrors([]);
 
@@ -43,9 +44,12 @@ export default function SignUp() {
 
     if (!signupInfo.nickname) {
       setErrors((prevErrors) => [...prevErrors, 'Nickname_empty'])
+    } else if(signupInfo.nickname.length < 2 || signupInfo.nickname.length > 8) {
+      setErrors((prevErrors) => [...prevErrors, 'Nickname_length'])
     } else if(!regExpNickname.test(signupInfo.nickname)) {
       setErrors((prevErrors) => [...prevErrors, 'Nickname_invaild'])
-    }
+    } 
+    
 
     if(!signupInfo.email) {
       setErrors((prevErrors) => [...prevErrors, 'Email_empty'])
@@ -55,31 +59,37 @@ export default function SignUp() {
 
     if(!signupInfo.password) {
       setErrors((prevErrors) => [...prevErrors, 'Password_empty'])
+    } else if(signupInfo.password.length < 8 || signupInfo.password.length > 20) {
+      setErrors((prevErrors) => [...prevErrors, 'Password_length'])
     } else if(!regExpPassword.test(signupInfo.password)) {
       setErrors((prevErrors) => [...prevErrors, 'Password_invaild'])
     } else {
-        fetch(`/members`, {
+      try {
+        const response = await fetch(`/members`, {
+        // const response = await fetch(`${BASE_URL}/members`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(signupInfo),
         })
-        .then(res => {
-          if (res.status === 201) {
-            return res.json().then(data => {
-              console.log('요청이 성공했습니다.');
-              console.log(data);
-              navigate('/login');
-            })
-          } else {
-            console.log('요청이 실패했습니다.');
-          }
-        })
-        .catch(error => {
-          console.log('에러', error);
-        });
+        if (response.status === 201) {
+          console.log('회원가입에 성공했습니다.');
+          console.log(response);
+          alert("회원가입이 완료되었습니다.");
+          navigate('/login');
+        } else if (response.status === 500) {
+          const data = await response.json()
+          console.log(data)
+            if(data === "MEMBER_EXIST") {
+              console.log('이미 등록된 이메일입니다.');
+              setErrors((prevErrors) => [...prevErrors, 'Email_already_registered'])
+            }
+        }
+      } catch(err) {
+        console.log('에러', err);
       }
+    }
   }
 
   return (
@@ -109,6 +119,9 @@ export default function SignUp() {
           </div>
         </LeftText>
         <div>
+          {/* <hiddenText>
+            <div>Create your Stack Overflow account. It’s free and only takes a minute.</div>
+          </hiddenText> */}
           <FormContainer>
             <form >
               <SignUpInputForm>
@@ -122,6 +135,9 @@ export default function SignUp() {
                 </input>
                 {errors.includes('Nickname_empty') && (
                   <ErrorMsg>Display name cannot be empty.</ErrorMsg>
+                )}
+                {errors.includes('Nickname_length') && (
+                  <ErrorMsg>Display name must be between 2 and 8 characters.</ErrorMsg>
                 )}
                 {errors.includes('Nickname_invaild') && (
                   <ErrorMsg>This Nickname is not vaild.</ErrorMsg>
@@ -155,6 +171,9 @@ export default function SignUp() {
                 {errors.includes('Password_empty') && (
                   <ErrorMsg>Password cannot be empty.</ErrorMsg>
                 )}
+                {errors.includes('Password_length') && (
+                  <ErrorMsg>Password must be between 8 and 20 characters.</ErrorMsg>
+                )}
                 {errors.includes('Password_invaild') && (
                   <ErrorMsg>This password is not vaild.</ErrorMsg>
                 )}
@@ -163,6 +182,9 @@ export default function SignUp() {
             </form>
             <SignUpBtn>
               <button type="submit" onClick={handleSignup}>Sign Up</button>
+              {errors.includes('Email_already_registered') && (
+                  <ErrorMsg>This email is already registered.</ErrorMsg>
+                )}
             </SignUpBtn>
             <p>By clicking “Sign up”, you agree to our <a href='https://stackoverflow.com/legal/terms-of-service/public'>terms of service</a> 
               and acknowledge that you have read and understand our <a href='https://stackoverflow.com/legal/privacy-policy'>privacy policy</a> and <a href='https://stackoverflow.com/conduct'>code of conduct</a>.</p>
