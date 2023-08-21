@@ -10,26 +10,17 @@ import {
   InputForm
 } from './Header.styled';
 import headerLogoImg from '../../common/image/header-logo.png';
-<<<<<<< HEAD
 
-import Search from  '../../common/image/Search.png'
-import profile from '../../common/image/profile.png'
-=======
 import Search from '../../common/image/Search.png'
->>>>>>> 412f19c (메인 페이지, 마이 페이지)
+import profile from '../../common/image/profile.png'
 import { logout, setLoginStatus } from '../../redux/actions/loginInfo'
 
 
 export default function Header() {
   const dispatch = useDispatch()
-<<<<<<< HEAD
 
   const loginStatus = useSelector((state) => state.loginReducer);
 
-=======
-  const isLoggedIn = useSelector((state) => state.login) || false
-  // const isLoggedIn = false;
->>>>>>> 412f19c (메인 페이지, 마이 페이지)
   const handleLogout = () => {
     // console.log('로그아웃');
     dispatch(logout());
@@ -45,27 +36,15 @@ export default function Header() {
   useEffect(() => {
     console.log(loginStatus);
     const storedAccessToken = localStorage.getItem('accessToken')
-<<<<<<< HEAD
-    if(storedAccessToken) {
+    if (storedAccessToken) {
       dispatch(setLoginStatus(true))
       console.log(loginStatus)
-=======
-    if (!storedAccessToken) {
-      dispatch(setLoginStatus({ isLoggedIn: true }))
-      console.log(isLoggedIn)
-      console.log('토큰 있음')
-      console.log(setLoginStatus())
->>>>>>> 412f19c (메인 페이지, 마이 페이지)
     } else {
       dispatch(setLoginStatus(false))
       console.log(loginStatus)
     }
-<<<<<<< HEAD
   }, []);
-=======
-  }, [])
 
->>>>>>> 412f19c (메인 페이지, 마이 페이지)
 
   return (
     <HeaderContainer>
@@ -96,7 +75,7 @@ export default function Header() {
               <li>
                 <Btn className='myPageBtn' to="/my-page">
                   <img src={profile} alt='profile'></img>
-                  </Btn>
+                </Btn>
               </li>
               <li>
                 <Btn className='logouBtn' onClick={handleLogout}>Log out</Btn>

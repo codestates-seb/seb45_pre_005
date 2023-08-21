@@ -5,7 +5,6 @@ import UserProfile from '../../components/UserProfile/UserProfile';
 import UserInfo from '../../components/UserInfo/UserInfo';
 import { BaseContainer, BaseWrap } from '../../style/Global.styled';
 import { MyPageContainer } from './MyPage.styled';
-import Nav from '../../components/Nav/Nav';
 
 export default function MyPage() {
   // const [userData, setUserData] = useState({
@@ -76,9 +75,6 @@ export default function MyPage() {
       <BaseWrap>
         <Nav tabNum={3} />
         <MyPageContainer>
-<<<<<<< HEAD
-          <UserInfo userData={userData} />
-=======
           <UserProfile
             userData={userData}
             setUserData={setUserData}
@@ -86,7 +82,6 @@ export default function MyPage() {
           <UserInfo
             userData={userData}
           />
->>>>>>> 412f19c (메인 페이지, 마이 페이지)
         </MyPageContainer>
       </BaseWrap>
       <Footer />

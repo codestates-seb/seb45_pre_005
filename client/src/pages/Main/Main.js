@@ -3,15 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { BaseContainer, BaseWrap } from '../../style/Global.styled';
 import { MainContainer } from './Main.styled';
 import Footer from '../../components/Footer/Footer';
-<<<<<<< HEAD
-import { mockupData } from './MOCK_DATA';
-import QuestionList from './QuestionList/QuestionList';
-import Nav from '../../components/Nav/Nav';
-=======
 import Nav from '../../components/Nav/Nav';
 import QuestionList from '../../components/QuestionList/QuestionList';
 import Pagination from '../../components/Pagination/Pagination';
->>>>>>> 412f19c (메인 페이지, 마이 페이지)
 
 export default function Main() {
   const location = useLocation();
@@ -65,13 +59,7 @@ export default function Main() {
           <div className="flex-box">
             <div className="left-box">
               <h1>All Questions</h1>
-<<<<<<< HEAD
-              <div className="questions-num">
-                {mockupData.length.toLocaleString()} questions
-              </div>
-=======
               <div className='questions-num'>{questionsCount.toLocaleString()} questions</div>
->>>>>>> 412f19c (메인 페이지, 마이 페이지)
             </div>
             <div className="right-box">
               <Link to="/add-question">

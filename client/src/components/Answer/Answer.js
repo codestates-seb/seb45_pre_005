@@ -14,7 +14,7 @@ import profileImg from '../../common/image/profile.png';
 import Comment from '../Comment/Comment';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Editor from '../../pages/AddQuestion/Editor/Editor';
+import Editor from '../Editor/Editor';
 import { answerEdit } from '../../redux/actions/detailQuestion';
 
 export default function Answer({ answer }) {
@@ -48,7 +48,7 @@ export default function Answer({ answer }) {
       </AnswerLikeContainer>
       <div className="answer-content-container">
         {answer.memberId === examMemberId &&
-        answer.answerId === answerState.target ? (
+          answer.answerId === answerState.target ? (
           answerState.flag ? (
             <Editor value={answer.content} />
           ) : (
