@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import { Link , useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { 
   LoginContainer,
@@ -16,9 +18,12 @@ import {
 import logo from  '../../common/image/logo.ico'
 import { login } from '../../redux/actions/loginInfo';
 
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const loginReducer = useSelector((state) => state.loginReducer);
 
   const [ loginInfo, setLoginInfo ] = useState({
     email: '',
@@ -30,60 +35,55 @@ export default function Login() {
     setLoginInfo({ ...loginInfo, [field]: value})
   }
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setErrors([]);
 
     const regExpEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     
     if(!loginInfo.email) {
-      setErrors((prevErrors) => [...prevErrors, 'Email_empty'])
+      return setErrors((prevErrors) => [...prevErrors, 'Email_empty'])
     } else if(!regExpEmail.test(loginInfo.email)) {
-      setErrors((prevErrors) => [...prevErrors, 'Email_invaild'])
+      return setErrors((prevErrors) => [...prevErrors, 'Email_invaild'])
     }
     
     if(!loginInfo.password) {
-      setErrors((prevErrors) => [...prevErrors, 'Password_empty'])
-    } else if (errors.length === 0) {
-        fetch(`/members`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(loginInfo),
-        })
-        .then(res => {
-          // 응답에 엑세스 토근이 있거나 리프레시 토큰이 있으면, 
-          if (res.headers.get('Authorization') && res.headers.get('Refresh')) { 
-              const accessToken = res.headers.get('Authorization').split(' ')[1]; // Bearer를 건너뛰고 실제 토큰 부분을 추출
-              const refreshToken = res.headers.get('Refresh')
-
-              res.json().then((data) => {
-                const { memberId } = data;
-                console.log(memberId)
-
-                // 토큰 저장
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('refreshToken', refreshToken); // 리프레시 토큰을 클라이언트에 저장??
-                localStorage.setItem('memberId', memberId);
-
-                // 로그인 상태 변경
-                dispatch(login({ accessToken, refreshToken, memberId }));
-                
-                // 메인페이지로 이동
-                navigate('/');
-              });
-              return 
-            } else {
-              // 좀더 디테일한 로그인 실패 로직 생각해보기. 비밀번호 틀림, 없는 이메일.
-            console.log('로그인에 실패했습니다.');
+      return setErrors((prevErrors) => [...prevErrors, 'Password_empty'])
+    } else {
+        try {
+          const response = await fetch(`${BASE_URL}/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(loginInfo),
+          })
+            if (response.status === 200) { 
+              // const { userId } = await response.json()
+              // console.log(userId)
+              const userId = '2asd123sdc';
+              const accessToken = response.headers.get('Authorization')
+              const refreshToken = response.headers.get('Refresh')
+              const isLoggedIn = true;
+              localStorage.setItem('accessToken', accessToken);
+              localStorage.setItem('refreshToken', refreshToken); 
+              
+              dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
+              console.log(loginReducer);
+              console.log(login(isLoggedIn, accessToken, refreshToken, userId));
+              console.log('로그인에 성공했습니다.');
+              navigate('/');
+              } else if (response.status === 401) {
+                console.log('로그인에 실패했습니다.');
+                setErrors((prevErrors) => [...prevErrors, 'Email_Or_Password_incorrect']);
+              } 
           }
-          }) 
-        .catch(error => {
-          console.log('에러', error);
-        });
+          catch(err) {
+            console.log('에러', err);
+          }
+        }
       }
-    }
+    
 
   return (
     <LoginContainer>
@@ -125,13 +125,13 @@ export default function Login() {
                 {errors.includes('Password_empty') && (
                   <ErrorMsg>Password cannot be empty.</ErrorMsg>
                 )}
-                {errors.includes('Password_invaild') && (
-                  <ErrorMsg>This password is not vaild.</ErrorMsg>
-                )}
               </InputForm>
             </form>
             <SignUpBtn>
-              <button type="submit" onClick={handleLogin}>Sign Up</button>
+              <button type="submit" onClick={handleLogin}>Log in</button>
+              {errors.includes('Email_Or_Password_incorrect') && (
+                  <ErrorMsg>Email or password is incorrect.</ErrorMsg>
+                )}
             </SignUpBtn>
           </FormContainer>
           <LinkTo>

@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 export const LoginContainer = styled.div`
   padding-top: 60px;
+  height: 100vh;
   background-color: hsl(210,8%,95%);
   display: flex;
   justify-content: center;
