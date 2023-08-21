@@ -44,6 +44,7 @@ public class MemberController {
         Member member = memberMapper.postDtoToEntity(postDto);
         memberService.createMember(member);
 
+
         return new ResponseEntity(HttpStatus.CREATED);
     }
     @PatchMapping()

@@ -85,6 +85,7 @@ public class AnswerService {
                         answer.getTitle(),
                         answer.getContent(),
                         answer.getCreateAt(),
+                        answer.getLikes().size(),
                         commentService.getComments(answer.getAnswerId())
 
                 )).collect(Collectors.toList());
