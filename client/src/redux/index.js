@@ -4,12 +4,18 @@ import {
   applyMiddleware
 } from 'redux';
 import thunk from 'redux-thunk';
-import { exampleReducer } from './reducers';
-import { loginReducer } from './reducers/loginInfoReducer'
-
+import { loginReducer } from './reducers/loginInfoReducer';
+import {
+  questionReducer,
+  answerReducer,
+  commentReducer
+} from './reducers/detailQuestion';
 export const store = createStore(
   combineReducers({
-    exampleReducer, loginReducer
+    loginReducer,
+    questionReducer,
+    answerReducer,
+    commentReducer
   }),
   applyMiddleware(thunk)
 );

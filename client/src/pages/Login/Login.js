@@ -4,7 +4,7 @@ import { Link , useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { 
+import {
   LoginContainer,
   LoginWrap,
   LoginBox,
@@ -13,9 +13,9 @@ import {
   InputForm,
   ErrorMsg,
   SignUpBtn,
-  LinkTo,
+  LinkTo
 } from './Login.styled';
-import logo from  '../../common/image/logo.ico'
+import logo from '../../common/image/logo.ico';
 import { login } from '../../redux/actions/loginInfo';
 
 // const BASE_URL = process.env.REACT_APP_API_URL;
@@ -25,15 +25,15 @@ export default function Login() {
   const dispatch = useDispatch();
   const loginReducer = useSelector((state) => state.loginReducer);
 
-  const [ loginInfo, setLoginInfo ] = useState({
+  const [loginInfo, setLoginInfo] = useState({
     email: '',
-    password: '',
+    password: ''
   });
-  const [ errors, setErrors ] = useState([]);
+  const [errors, setErrors] = useState([]);
 
   const handleInputValue = (field, value) => {
-    setLoginInfo({ ...loginInfo, [field]: value})
-  }
+    setLoginInfo({ ...loginInfo, [field]: value });
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -84,29 +84,27 @@ export default function Login() {
           }
         }
       }
-    
 
   return (
     <LoginContainer>
       <LoginWrap>
         <LoginBox>
           <LogoImg>
-            <Link to='/'>
-              <img src={logo} alt='logo'></img>
+            <Link to="/">
+              <img src={logo} alt="logo"></img>
             </Link>
           </LogoImg>
 
           <FormContainer>
-            <form >
+            <form>
               <InputForm>
-                <label htmlFor='email'>Email</label>
-                <input 
-                  type='text' 
-                  id='email' 
-                  value={loginInfo.email} 
-                  onChange={(e) => handleInputValue("email", e.target.value)}
-                  >
-                </input>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  value={loginInfo.email}
+                  onChange={(e) => handleInputValue('email', e.target.value)}
+                ></input>
                 {errors.includes('Email_empty') && (
                   <ErrorMsg>Email cannot be empty.</ErrorMsg>
                 )}
@@ -115,14 +113,13 @@ export default function Login() {
                 )}
               </InputForm>
               <InputForm>
-                <label htmlFor='password'>Password</label>
-                <input 
-                  type='password' 
-                  id='password' 
-                  value={loginInfo.password} 
-                  onChange={(e) => handleInputValue("password", e.target.value)}
-                  >
-                </input>
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={loginInfo.password}
+                  onChange={(e) => handleInputValue('password', e.target.value)}
+                ></input>
                 {errors.includes('Password_empty') && (
                   <ErrorMsg>Password cannot be empty.</ErrorMsg>
                 )}
@@ -136,11 +133,15 @@ export default function Login() {
             </SignUpBtn>
           </FormContainer>
           <LinkTo>
-            <div>Don’t have an account?&nbsp;
-              <a href='/sign-up'>Sign up</a>
+            <div>
+              Don’t have an account?&nbsp;
+              <a href="/sign-up">Sign up</a>
             </div>
-            <div>Are you an employer?&nbsp;
-              <a href='https://talent.stackoverflow.com/users/login'>Sign up on Talent</a>
+            <div>
+              Are you an employer?&nbsp;
+              <a href="https://talent.stackoverflow.com/users/login">
+                Sign up on Talent
+              </a>
             </div>
           </LinkTo>
         </LoginBox>
