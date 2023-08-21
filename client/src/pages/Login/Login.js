@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { Link , useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,7 +18,7 @@ import {
 import logo from '../../common/image/logo.ico';
 import { login } from '../../redux/actions/loginInfo';
 
-// const BASE_URL = process.env.REACT_APP_API_URL;
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export default function Login() {
   const navigate = useNavigate();
@@ -39,51 +39,54 @@ export default function Login() {
     e.preventDefault();
     setErrors([]);
 
-    const regExpEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    
-    if(!loginInfo.email) {
-      return setErrors((prevErrors) => [...prevErrors, 'Email_empty'])
-    } else if(!regExpEmail.test(loginInfo.email)) {
-      return setErrors((prevErrors) => [...prevErrors, 'Email_invaild'])
+    const regExpEmail =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+    if (!loginInfo.email) {
+      return setErrors((prevErrors) => [...prevErrors, 'Email_empty']);
+    } else if (!regExpEmail.test(loginInfo.email)) {
+      return setErrors((prevErrors) => [...prevErrors, 'Email_invaild']);
     }
-    
-    if(!loginInfo.password) {
-      return setErrors((prevErrors) => [...prevErrors, 'Password_empty'])
+
+    if (!loginInfo.password) {
+      return setErrors((prevErrors) => [...prevErrors, 'Password_empty']);
     } else {
-        try {
-          const response = await fetch(`/login`, {
-          // const response = await fetch(`${BASE_URL}/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(loginInfo),
-          })
-            if (response.status === 200) { 
-              // const { userId } = await response.json()
-              // console.log(userId)
-              const userId = '2asd123sdc';
-              const accessToken = response.headers.get('Authorization')
-              const refreshToken = response.headers.get('Refresh')
-              const isLoggedIn = true;
-              localStorage.setItem('accessToken', accessToken);
-              localStorage.setItem('refreshToken', refreshToken); 
-              
-              dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
-              console.log(loginReducer);
-              console.log(login(isLoggedIn, accessToken, refreshToken, userId));
-              console.log('로그인에 성공했습니다.');
-              navigate('/');
-              } else if (response.status === 401) {
-                console.log('로그인에 실패했습니다.');
-                setErrors((prevErrors) => [...prevErrors, 'Email_Or_Password_incorrect']);
-              } 
-          }
-          catch(err) {
-            console.log('에러', err);
-          }
+      try {
+        // const response = await fetch(`/login`, {
+        const response = await fetch(`${BASE_URL}/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(loginInfo)
+        });
+        if (response.status === 200) {
+          // const { userId } = await response.json()
+          // console.log(userId)
+          const userId = '2asd123sdc';
+          const accessToken = response.headers.get('Authorization');
+          const refreshToken = response.headers.get('Refresh');
+          const isLoggedIn = true;
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', refreshToken);
+
+          dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
+          console.log(loginReducer);
+          console.log(login(isLoggedIn, accessToken, refreshToken, userId));
+          console.log('로그인에 성공했습니다.');
+          navigate('/');
+        } else if (response.status === 401) {
+          console.log('로그인에 실패했습니다.');
+          setErrors((prevErrors) => [
+            ...prevErrors,
+            'Email_Or_Password_incorrect'
+          ]);
         }
+      } catch (err) {
+        console.log('에러', err);
       }
+    }
+  };
 
   return (
     <LoginContainer>
@@ -126,10 +129,12 @@ export default function Login() {
               </InputForm>
             </form>
             <SignUpBtn>
-              <button type="submit" onClick={handleLogin}>Log in</button>
+              <button type="submit" onClick={handleLogin}>
+                Log in
+              </button>
               {errors.includes('Email_Or_Password_incorrect') && (
-                  <ErrorMsg>Email or password is incorrect.</ErrorMsg>
-                )}
+                <ErrorMsg>Email or password is incorrect.</ErrorMsg>
+              )}
             </SignUpBtn>
           </FormContainer>
           <LinkTo>
