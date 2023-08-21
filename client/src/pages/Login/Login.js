@@ -18,7 +18,7 @@ import {
 import logo from  '../../common/image/logo.ico'
 import { login } from '../../redux/actions/loginInfo';
 
-const BASE_URL = process.env.REACT_APP_API_URL;
+// const BASE_URL = process.env.REACT_APP_API_URL;
 
 export default function Login() {
   const navigate = useNavigate();
@@ -51,7 +51,8 @@ export default function Login() {
       return setErrors((prevErrors) => [...prevErrors, 'Password_empty'])
     } else {
         try {
-          const response = await fetch(`${BASE_URL}/login`, {
+          const response = await fetch(`/login`, {
+          // const response = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

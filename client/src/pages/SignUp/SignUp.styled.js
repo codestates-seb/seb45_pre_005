@@ -15,10 +15,12 @@ export const SignUpWrap = styled.div`
   align-items: center;
   justify-content: center;
   max-width: 1264px;
+  padding: 24px;
 `
 // 왼쪽 text 
 export const LeftText = styled.section`
   max-width: 36em; 
+  min-width: 30em;
   margin: 0px 48px 128px 0px;
   h1 {
     font-size: 27.04px;
@@ -47,9 +49,19 @@ export const LeftText = styled.section`
       color: hsl(206,100%,52%);
     }
   }
+  @media screen and (max-width: 795px) {
+    display: none;
+}
 `
 
 // 회원가입 박스
+export const hiddenText = styled.div`
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 32px;
+`
 export const FormContainer = styled.div`
   max-width: 24.31em;
   min-width: 24.31em;
