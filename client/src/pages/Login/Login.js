@@ -61,14 +61,13 @@ export default function Login() {
           body: JSON.stringify(loginInfo)
         });
         if (response.status === 200) {
-          // const { userId } = await response.json()
-          // console.log(userId)
-          const userId = '2asd123sdc';
+          const userId = response.headers.get('Memberid');
           const accessToken = response.headers.get('Authorization');
           const refreshToken = response.headers.get('Refresh');
           const isLoggedIn = true;
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
+          localStorage.setItem('userId', userId);
 
           dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
           console.log(loginReducer);

@@ -6,12 +6,16 @@ import { AddQuestionContainer } from './AddQuestion.styled';
 import QuestionGuide from '../../components/QuestionGuide/QuestionGuide';
 import InputGuide from '../../components/InputGuide/InputGuide';
 import InputForm from '../../components/InputForm/InputForm';
-import { inputGuideProps, inputFormProps } from '../../common/data/AddQuestionPropsData';
-
+import {
+  inputGuideProps,
+  inputFormProps
+} from '../../common/data/AddQuestionPropsData';
+import { useSelector } from 'react-redux';
 export default function AddQuestion() {
   const [focusedInput, setFocusedInput] = useState(null);
   const [inputTitle, setInputTitle] = useState('');
   const [inputBody, setInputBody] = useState('');
+  const loginState = useSelector((state) => state.loginReducer);
   // const [inputTag, setInputTag] = useState('');
   // const [tags, setTags] = useState([]);
 
@@ -49,7 +53,7 @@ export default function AddQuestion() {
     setInputBody('');
     // setInputTag('');
     // setTags([]);
-  }
+  };
 
   const htmlToText = (html) => {
     const parser = new DOMParser();
@@ -76,16 +80,19 @@ export default function AddQuestion() {
     console.log(data);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/questions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': process.env.REACT_APP_AUTH_TOKEN
-        },
-        body: JSON.stringify(data),
-        credentials: 'include',
-        mode: 'cors'
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/questions`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: loginState.accessToken
+          },
+          body: JSON.stringify(data),
+          credentials: 'include',
+          mode: 'cors'
+        }
+      );
 
       if (response.ok) {
         console.log('Question Submission Success.');
@@ -101,7 +108,8 @@ export default function AddQuestion() {
     }
   };
 
-  const isSubmitButtonDisabled = !inputTitle || htmlToText(inputBody).length < 20;
+  const isSubmitButtonDisabled =
+    !inputTitle || htmlToText(inputBody).length < 20;
 
   return (
     <BaseContainer>
