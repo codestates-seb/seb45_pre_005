@@ -40,7 +40,6 @@ public class MemberService {
         List<String> roles = memberAuthority.createRoles();
         member.setRoles(roles);
 
-
         return memberRepository.save(member);
     }
 
