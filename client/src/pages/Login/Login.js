@@ -18,9 +18,8 @@ import {
 import logo from  '../../common/image/logo.ico'
 import { login } from '../../redux/actions/loginInfo';
 
-// const BASE_URL = process.env.REACT_APP_API_URL;
-
 export default function Login() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loginReducer = useSelector((state) => state.loginReducer);
@@ -51,8 +50,8 @@ export default function Login() {
       return setErrors((prevErrors) => [...prevErrors, 'Password_empty'])
     } else {
         try {
-          const response = await fetch(`/login`, {
-          // const response = await fetch(`${BASE_URL}/login`, {
+          // const response = await fetch(`/login`, {
+          const response = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -60,18 +59,15 @@ export default function Login() {
             body: JSON.stringify(loginInfo),
           })
             if (response.status === 200) { 
-              // const { userId } = await response.json()
-              // console.log(userId)
-              const userId = '2asd123sdc';
               const accessToken = response.headers.get('Authorization')
               const refreshToken = response.headers.get('Refresh')
               const isLoggedIn = true;
               localStorage.setItem('accessToken', accessToken);
               localStorage.setItem('refreshToken', refreshToken); 
               
-              dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
+              dispatch(login(isLoggedIn, accessToken, refreshToken));
               console.log(loginReducer);
-              console.log(login(isLoggedIn, accessToken, refreshToken, userId));
+              console.log(login(isLoggedIn, accessToken, refreshToken));
               console.log('로그인에 성공했습니다.');
               navigate('/');
               } else if (response.status === 401) {

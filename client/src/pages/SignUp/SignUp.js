@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { 
   SignUpContainer, 
   SignUpWrap,
-  // eslint-disable-next-line no-unused-vars
-  hiddenText,
   FormContainer,
   LeftText, 
   SignUpInputForm,
@@ -18,8 +16,10 @@ import signup_2 from '../../common/image/signup_2.png'
 import signup_3 from '../../common/image/signup_3.png'
 import signup_4 from '../../common/image/signup_4.png'
 
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 export default function SignUp() {
-  // const BASE_URL = process.env.REACT_APP_API_URL;
+  
   const navigate = useNavigate()
 
   const [ signupInfo, setSignupInfo ] = useState({
@@ -65,13 +65,15 @@ export default function SignUp() {
       setErrors((prevErrors) => [...prevErrors, 'Password_invaild'])
     } else {
       try {
-        const response = await fetch(`/members`, {
-        // const response = await fetch(`${BASE_URL}/members`, {
+        // const response = await fetch(`/members`, {
+        const response = await fetch(`${BASE_URL}/members`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(signupInfo),
+          credentials: 'include',
+          mode: 'cors',
         })
         if (response.status === 201) {
           console.log('회원가입에 성공했습니다.');
@@ -119,9 +121,6 @@ export default function SignUp() {
           </div>
         </LeftText>
         <div>
-          {/* <hiddenText>
-            <div>Create your Stack Overflow account. It’s free and only takes a minute.</div>
-          </hiddenText> */}
           <FormContainer>
             <form >
               <SignUpInputForm>
