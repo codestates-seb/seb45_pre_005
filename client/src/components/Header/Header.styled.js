@@ -30,9 +30,9 @@ export const LogoLink = styled(Link)`
   &:hover {
     background-color: #e3e6e8;
   }
-`;
-export const HeaderLogo = styled.img`
-  padding: 0 8px;
+  img {
+    padding: 0 8px;
+  }
 `;
 
 export const InputForm = styled.div`
@@ -40,16 +40,18 @@ export const InputForm = styled.div`
   align-items: center;
   flex-grow: 1;
   position: relative;
-  padding: 0px 8px;
+  padding: 0px 15px;
 
   > input {
-    padding: 7.8px 32px;
+    padding: 7.8px 9.1px 7.8px 35px;
     border: 1px solid hsl(210,8%,75%);
     border-radius: 6px;
     font-size: 15px;
     font-weight: 300;
     width: 100%;
     margin: 0;
+    display: block;
+    height: 39px;
     &:focus {
       border: 1px solid #59A4DE;
       box-shadow: 0px 0px 0px 4px #D9EAF7;
@@ -66,15 +68,15 @@ export const InputForm = styled.div`
 `
 export const NavContainer = styled.nav`
   padding-right: 12px;
-  
   ul {
     display: flex;
+    align-items: center;
   }
 `
 export const Btn = styled(Link)`
   font-size: 13px;
   font-weight: 200;
-  /* display: inline-block; */
+  display: inline-block;
   padding: 8px 10.4px;
   background-color: hsl(205,46%,92%);
   color: hsl(205,47%,42%);
@@ -105,15 +107,28 @@ export const Btn = styled(Link)`
   }
 
   &.myPageBtn {
-    
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+  img {
+    width: 30px;
+    height: 30px;
+  }
+  &:hover {
+      background-color: hsl(205,57%,81%);
+      &:active {
+      box-shadow: 0px 0px 0px 4px #D9EAF7;
+      }
+    }
   }
 
   &.logouBtn {
-    margin-left: 8px;
-    background-color: hsl(205,46%,92%);
-    color: hsl(205,47%,42%);
+    margin-left: 15px;
+    color: white;
+    background-color: hsl(206,100%,52%);
     &:hover {
-      background-color: hsl(205,57%,81%);
+      background-color: hsl(206,100%,40%);
       &:active {
       box-shadow: 0px 0px 0px 4px #D9EAF7;
       }

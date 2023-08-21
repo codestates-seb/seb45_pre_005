@@ -4,7 +4,7 @@ const initialState = {
     isLoggedIn: false,
     accessToken: '',
     refreshToken: '',
-    memberId: '',
+    userId: '',
 }
 
 export const loginReducer = ( state = initialState, action ) => {
@@ -12,10 +12,10 @@ export const loginReducer = ( state = initialState, action ) => {
         case LOGIN:
             return {
                 ...state,
-                isLoggedIn: true,
+                isLoggedIn: action.payload.isLoggedIn,
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
-                memberId: action.payload.memberId,
+                userId: action.payload.userId
             };
         case LOGOUT:
             return {
@@ -23,14 +23,15 @@ export const loginReducer = ( state = initialState, action ) => {
                 isLoggedIn: false,
                 accessToken: '',
                 refreshToken: '',
-                memberId: '',
+                userId: '',
             }
         case SET_LOGIN_STATUS:
             return {
                 ...state,
-                isLoggedIn: action.payload.isLoggedIn,
+                isLoggedIn: action.payload.isLoggedIn
                 }
         default: 
             return state;
+            
     }
 }

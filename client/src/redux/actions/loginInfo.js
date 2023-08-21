@@ -2,9 +2,14 @@ export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS'
 
-export const login = ( accessToken, refreshToken, memberId ) => ({
+export const login = ( isLoggedIn, accessToken, refreshToken, userId ) => ({
     type: LOGIN,
-    payload: { accessToken, refreshToken, memberId }
+    payload: { 
+        isLoggedIn, 
+        accessToken, 
+        refreshToken, 
+        userId
+    }
 });
 
 export const logout = () => ({
@@ -13,5 +18,7 @@ export const logout = () => ({
 
 export const setLoginStatus = ( isLoggedIn ) => ({
     type: SET_LOGIN_STATUS,
-    payload: { isLoggedIn }
+    payload: { 
+        isLoggedIn
+    }
 });
