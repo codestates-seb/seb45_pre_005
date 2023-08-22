@@ -27,19 +27,19 @@ export default function Main() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken'),
+            Authorization: localStorage.getItem('accessToken'),
             'ngrok-skip-browser-warning': '69420'
           },
           credentials: 'include',
-          mode: 'cors',
+          mode: 'cors'
         });
 
         if (response.ok) {
           const data = await response.json();
           setQuestions(data.data);
           setQuestionsCount(data.pageInfo.totalElements);
-          setTotalPages(data.pageInfo.totalPages)
-          console.log('get questions success');
+          setTotalPages(data.pageInfo.totalPages);
+          // console.log('get questions success');
         } else {
           console.error('Fetch questions failed');
         }
@@ -59,7 +59,9 @@ export default function Main() {
           <div className="flex-box">
             <div className="left-box">
               <h1>All Questions</h1>
-              <div className='questions-num'>{questionsCount.toLocaleString()} questions</div>
+              <div className="questions-num">
+                {questionsCount.toLocaleString()} questions
+              </div>
             </div>
             <div className="right-box">
               <Link to="/add-question">

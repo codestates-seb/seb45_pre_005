@@ -11,8 +11,12 @@ export const AnswerWrap = styled.div`
   }
   .add-comment-btn {
     font-size: 13px;
-    margin-right: 10px;
+    color: var(--blue);
+  }
+
+  .add-comment-btn:disabled {
     color: var(--gray);
+    cursor: not-allowed;
   }
 `;
 
@@ -70,5 +74,10 @@ export const CommentForm = styled.div`
       outline: none;
       transition: none;
     }
+  }
+
+  p {
+    font-size: 11px;
+    color: red;
   }
 `;

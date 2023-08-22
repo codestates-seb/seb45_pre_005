@@ -81,13 +81,13 @@ export default function SignUp() {
           body: JSON.stringify(signupInfo)
         });
         if (response.status === 201) {
-          console.log('회원가입에 성공했습니다.');
-          console.log(response);
+          // console.log('회원가입에 성공했습니다.');
+          // console.log(response);
           alert('회원가입이 완료되었습니다.');
           navigate('/login');
         } else if (response.status === 500) {
           const data = await response.json();
-          console.log(data);
+          // console.log(data);
           if (data === 'MEMBER_EXIST') {
             console.log('이미 등록된 이메일입니다.');
             setErrors((prevErrors) => [

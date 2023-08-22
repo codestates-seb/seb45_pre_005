@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 export const QuestionCardContainer = styled.div`
-  padding: 1.3rem;
+  padding: 1.1rem;
   border-bottom: 1px solid #e3e6e8;
   width: 100%;
   overflow: auto;
@@ -36,7 +36,7 @@ export const QuestionCardContainer = styled.div`
 
   .question-title {
     font-size: 17px;
-    color: #0074CC;
+    color: #0074cc;
   }
 
   .question-contents {
@@ -56,15 +56,31 @@ export const QuestionCardContainer = styled.div`
   .author-info {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
   }
 
+  .author-info div {
+    width: 17px;
+    height: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--gray-10);
+    border-radius: 5px;
+    margin-right: 3px;
+  }
+
+  .author-info img {
+    width: 15px;
+    height: 15px;
+  }
   span {
     font-size: 12px;
     color: #6a737c;
   }
 
   .author-nickname {
-    color: #0074CC;
+    color: #0074cc;
     font-size: 13px;
   }
 `;
