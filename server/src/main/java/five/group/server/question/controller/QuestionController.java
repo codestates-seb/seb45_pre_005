@@ -50,7 +50,7 @@ public class QuestionController {
 
 
     @PostMapping
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post requestBody) {
+    public ResponseEntity postQuestion(@RequestBody @Valid QuestionDto.Post requestBody) {
 
         Question question = questionMapper.questionPostDtoToQuestion(requestBody);
 
@@ -60,8 +60,8 @@ public class QuestionController {
     }
 
     @PatchMapping("/{question-id}")
-    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive Long questionId,
-                                        @Valid @RequestBody QuestionDto.Patch requestBody) {
+    public ResponseEntity patchQuestion(@PathVariable("question-id") @Valid Long questionId,
+                                         @RequestBody QuestionDto.Patch requestBody) {
 
         Question question = questionMapper.questionPatchDtoToQuestion(requestBody);
         question.setQuestionId(questionId);
