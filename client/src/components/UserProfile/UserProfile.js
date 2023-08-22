@@ -16,7 +16,7 @@ export default function UserProfile({
   const getMemberFor = () => {
     const signupDate = new Date(userData.data.createAt);
     const currentDate = new Date();
-    const timeDiff = currentDate - signupDate;
+    const timeDiff = currentDate - signupDate + (1000 * 60 * 60 * 24);
 
     const yearsElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365));
     const monthsElapsed = Math.floor((timeDiff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44));
@@ -60,15 +60,14 @@ export default function UserProfile({
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': process.env.REACT_APP_AUTH_TOKEN
+          'Authorization': localStorage.getItem('accessToken')
         },
         body: JSON.stringify(data),
         credentials: 'include'
       });
 
       if (response.ok) {
-        console.log('Update nickname success');
-        console.log(response);
+        alert('Nickname changed.');
         setUserData({
           ...userData,
           data: {
@@ -77,27 +76,18 @@ export default function UserProfile({
           }
         });
       } else {
-        console.error('Failed to update nickname');
+        alert('Fiailed to update nickname.');
       }
     } catch (error) {
-      console.error(error);
+      alert('Error: Failed to update nickname.');
     }
 
     setIsEditMode(false);
-
-    // setUserData({
-    //   ...userData,
-    //   data: {
-    //     ...userData.data,
-    //     nickname: newNickname
-    //   }
-    // });
   }
 
   const handleNinknameInput = (e) => {
     setIsNicknameValid(e.target.value.length >= 2)
     setNewNickname(e.target.value);
-    console.log(e.target.value);
   }
 
   return (

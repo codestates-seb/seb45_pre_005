@@ -20,16 +20,14 @@ export default function QuestionCard({ question }) {
     <Link to={`/questions/${question.questionId}`}>
       <QuestionCardContainer>
         <div className='question-info'>
-          <span>0 votes</span>
-          <span>0 answers</span>
-          <span>0 reviews</span>
+          <span>{question.answerCount} answers</span>
         </div>
         <div className='question-main'>
           <div className='question-title'>
             {title}
           </div>
           <div className='question-contents'>
-            {content.repeat(100).slice(0, 350)}
+            {content}
           </div>
           <div className='author-info'>
             <span className='author-nickname'>{author}</span>

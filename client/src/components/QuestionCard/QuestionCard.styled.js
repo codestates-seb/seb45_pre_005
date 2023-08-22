@@ -24,7 +24,7 @@ export const QuestionCardContainer = styled.div`
     align-items: flex-end;
     font-size: 13px;
     color: #6a737c;
-    padding: 0 1rem 0 2rem;
+    padding: 0.1rem 1rem 0 2rem;
     flex-shrink: 0;
   }
 

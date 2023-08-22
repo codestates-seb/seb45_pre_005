@@ -1,6 +1,5 @@
 import QuestionCard from '../QuestionCard/QuestionCard';
 import { QuestionListContainer } from './QuestionList.styled';
-// import Pagination from '../Pagination/Pagination';
 
 export default function QuestionList({
   questions
