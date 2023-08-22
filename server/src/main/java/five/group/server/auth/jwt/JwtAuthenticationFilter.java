@@ -3,6 +3,7 @@ package five.group.server.auth.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import five.group.server.member.login.LoginDto;
 import five.group.server.member.entity.Member;
+import five.group.server.refreshtoken.RefreshToken;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,9 +48,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
+        String loginMemberId = String.valueOf(member.getMemberId());
 
         response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("Refresh", refreshToken);
+        response.setHeader("memberId",loginMemberId);
+
+        RefreshToken.saveRefreshToken(refreshToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);
     }

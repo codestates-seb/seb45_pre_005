@@ -1,4 +1,4 @@
-package five.group.server.auth;
+package five.group.server.auth.authenticationhandler;
 
 
 import five.group.server.error.HandlerErrorResponse;

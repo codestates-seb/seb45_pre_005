@@ -11,6 +11,7 @@ import five.group.server.member.entity.Member;
 import five.group.server.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static five.group.server.exception.ExceptionCode.*;
@@ -42,6 +43,7 @@ public class LikesService {
         Like like = Like.builder()
                 .member(findMember)
                 .answer(findAnswer)
+                .createAt(LocalDateTime.now())
                 .build();
 
         return likeRepository.save(like);

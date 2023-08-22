@@ -5,6 +5,7 @@ import five.group.server.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,5 +26,8 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "answerId")
     private Answer answer;
+
+    @Column
+    private LocalDateTime createAt = LocalDateTime.now();
 
 }

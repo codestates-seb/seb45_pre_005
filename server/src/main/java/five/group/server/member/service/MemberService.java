@@ -1,7 +1,7 @@
 package five.group.server.member.service;
 
 
-import five.group.server.auth.MemberAuthority;
+import five.group.server.auth.userdetails.MemberAuthority;
 import five.group.server.exception.BusinessLogicException;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;

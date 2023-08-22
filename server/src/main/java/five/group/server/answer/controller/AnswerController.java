@@ -34,7 +34,7 @@ public class AnswerController {
     }
 
     @PostMapping
-    public ResponseEntity postAnswer(@RequestBody AnswerPostDto postDto){
+    public ResponseEntity postAnswer(@RequestBody @Valid AnswerPostDto postDto){
         Answer answer = answerMapper.postDtoToEntity(postDto);
         Long questionId = postDto.getQuestionId();
         answerService.createAnswer(answer, questionId);
