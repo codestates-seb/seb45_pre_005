@@ -59,6 +59,65 @@ export const DetailContent = styled.div`
   .ql-container {
     min-height: 20em;
   }
+  .innerHtml {
+    h1 {
+      font-size: 2em;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    h3 {
+      font-size: 1.17em;
+    }
+    p {
+      padding: 0.1rem 0;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    u {
+      text-decoration: underline;
+    }
+
+    s {
+      text-decoration: line-through;
+    }
+
+    blockquote {
+      background-color: #f9f9f9;
+      border-left: 4px solid lightgray;
+      padding: 1rem;
+    }
+
+    ol {
+      list-style: decimal;
+      padding: 1rem;
+    }
+
+    ul {
+      list-style: disc;
+      padding: 1rem;
+    }
+    pre.ql-syntax {
+      font-family: monospace;
+      background-color: #f6f6f6;
+      color: #2f3337;
+      overflow: visible;
+      white-space: pre-wrap;
+      margin-bottom: 5px;
+      margin-top: 5px;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+  }
 `;
 
 export const ButtonContainer = styled.div`

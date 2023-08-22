@@ -18,7 +18,6 @@ import profileImg from '../../common/image/profile.png';
 import likeUpImg from '../../common/image/like-up.png';
 import likeDownImg from '../../common/image/like-down.png';
 import Answer from '../../components/Answer/Answer';
-import { allData } from '../../common/data/detailQuestion';
 import Editor from '../../components/Editor/Editor';
 import { AnswerLikeContainer } from '../../components/Answer/Answer.styled';
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,56 +26,67 @@ import {
   endQuestionEdit
 } from '../../redux/actions/detailQuestion';
 import { dateFormat } from '../../common/utils/dateFormat';
+import {
+  deleteQuestion,
+  getQuestion,
+  patchQuestion
+} from '../../common/utils/fetchQuestion';
 export default function DetailQuestion() {
   const author = true;
-  // eslint-disable-next-line no-undef
-  const BASE_URL = process.env.REACT_APP_API_URL;
+
   const param = useParams();
   const [question, setQuestion] = useState({});
   const [answers, setAnswers] = useState([]);
 
-  const [title, setTitle] = useState();
-  const [content, setContent] = useState();
+  const [editTitle, setEditTitle] = useState();
+  const [editContent, setEditContent] = useState();
 
   const dispatch = useDispatch();
   const questionEditFlag = useSelector((state) => state.questionReducer);
-
-  const examMemberId = 2;
+  const loginState = useSelector((state) => state.loginReducer);
 
   useEffect(() => {
-    fetch(`/questions/${param.id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': '69420'
-      },
-      credentials: 'include',
-      mode: 'cors'
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setQuestion(data.data);
-        setAnswers(data.list);
-        setTitle(data.data.title);
-        setContent(data.data.content);
+    getQuestion(param.id)
+      .then((value) => {
+        setQuestion(value.data);
+        setAnswers(value.list);
+        setEditTitle(value.data.title);
+        setEditContent(value.data.content);
       })
       .catch((error) => console.log(error));
+
+    // fetch(`/questions/${param.id}`, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'ngrok-skip-browser-warning': '69420'
+    //   },
+    //   credentials: 'include',
+    //   mode: 'cors'
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setQuestion(data.data);
+    //     setAnswers(data.list);
+    //     setTitle(data.data.title);
+    //     setContent(data.data.content);
+    //   });
   }, []);
 
-  console.log(question);
-  console.log(answers);
-
+  // console.log(question);
+  // console.log(answers);
+  // console.log(loginState);
   // const handleQuestionEditFlag = () => {
   //   dispatch(questionEdit(true));
   //   console.log(questionEditFlag);
   // };
 
   const handleTitleChange = (event) => {
-    setTitle(event.target.value);
+    setEditTitle(event.target.value);
   };
 
   const handleBodyChange = (html) => {
-    setContent(html);
+    setEditContent(html);
   };
   const htmlToText = (html) => {
     const parser = new DOMParser();
@@ -85,29 +95,64 @@ export default function DetailQuestion() {
   };
 
   const submitQuestionPatch = async () => {
-    if (!title || htmlToText(content).length < 20) {
+    if (!editTitle || htmlToText(editContent).length < 20) {
+      alert('제목이 비어있거나 내용이 짧습니다.');
       return;
     }
 
     const data = {
-      title: title,
-      content: content
+      title: editTitle,
+      content: editContent
     };
 
-    await fetch(`${BASE_URL}/questions/${question.questionId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W10sInVzZXJuYW1lIjoidGVzdEB0ZXN0Iiwic3ViIjoidGVzdEB0ZXN0IiwiZXhwIjoxNjkyNjAzODIxfQ.O8y5exaF2ijlNUslC-6Zh70yz3ah0B4JiI7mcg9hgy8`
-      },
-      body: JSON.stringify(data),
-      credentials: 'include',
-      mode: 'cors'
-    }).then((res) => console.log(res));
+    const patchResult = await patchQuestion(
+      question.questionId,
+      data,
+      loginState.accessToken
+    );
 
-    dispatch(endQuestionEdit(false));
+    if (patchResult.status === 200) {
+      getQuestion(param.id)
+        .then((value) => {
+          setQuestion(value.data);
+          setAnswers(value.list);
+          setEditTitle(value.data.title);
+          setEditContent(value.data.content);
+          dispatch(endQuestionEdit(false));
+        })
+        .catch((error) => console.log(error));
+    } else {
+      console.log(patchResult);
+      console.log(patchResult.status);
+      return alert('Error!');
+    }
+
+    // patchResult
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       getQuestion(param.id)
+    //         .then((value) => {
+    //           setQuestion(value.data);
+    //           setAnswers(value.list);
+    //           setEditTitle(value.data.title);
+    //           setEditContent(value.data.content);
+    //           dispatch(endQuestionEdit(false));
+    //         })
+    //         .catch((error) => console.log(error));
+    //     } else {
+    //       console.log(res);
+    //       console.log(res.status);
+    //       return alert('Error!');
+    //     }
+    //   })
+    //   .catch((error) => console.log(error));
   };
 
+  const handleDeleteQuestion = () => {
+    const result = deleteQuestion(question.questionId, loginState.accessToken);
+
+    console.log(result);
+  };
   return (
     <BaseContainer>
       <BaseWrap>
@@ -117,7 +162,7 @@ export default function DetailQuestion() {
             {questionEditFlag ? (
               <input
                 type="text"
-                defaultValue={title}
+                defaultValue={editTitle}
                 onChange={handleTitleChange}
               />
             ) : (
@@ -152,7 +197,7 @@ export default function DetailQuestion() {
             </AnswerLikeContainer>
             <div className="detail-wrap">
               {questionEditFlag ? (
-                <Editor value={content} onChange={handleBodyChange} />
+                <Editor value={editContent} onChange={handleBodyChange} />
               ) : (
                 <div
                   className="innerHtml"
@@ -162,7 +207,7 @@ export default function DetailQuestion() {
 
               <DescContainer>
                 <div>
-                  {question.memberId === examMemberId ? (
+                  {question.memberId == loginState.userId ? (
                     questionEditFlag ? (
                       <>
                         <button
@@ -179,7 +224,7 @@ export default function DetailQuestion() {
                       </>
                     ) : (
                       <>
-                        <button>Delete</button>
+                        <button onClick={handleDeleteQuestion}>Delete</button>
                         <button onClick={() => dispatch(questionEdit(true))}>
                           Edit
                         </button>
@@ -200,7 +245,7 @@ export default function DetailQuestion() {
             </div>
           </DetailContent>
           <AnswerContainer>
-            <h2>2 Answers</h2>
+            <h2>{answers.length > 0 ? answers.length : 0} Answers</h2>
             {answers.map((answer, idx) => {
               return <Answer key={idx} answer={answer} />;
             })}
@@ -212,7 +257,7 @@ export default function DetailQuestion() {
           </AnswerFormContainer>
         </DetailContainer>
         <ButtonContainer>
-          <LinkButton to="/">Ask Question</LinkButton>
+          <LinkButton to="/add-question">Ask Question</LinkButton>
         </ButtonContainer>
       </BaseWrap>
       <Footer />

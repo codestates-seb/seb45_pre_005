@@ -5,8 +5,11 @@ import { AddQuestionContainer } from './AddQuestion.styled';
 import QuestionGuide from '../../components/QuestionGuide/QuestionGuide';
 import InputGuide from '../../components/InputGuide/InputGuide';
 import InputForm from '../../components/InputForm/InputForm';
-import { inputGuideProps, inputFormProps } from '../../common/data/AddQuestionPropsData';
-
+import {
+  inputGuideProps,
+  inputFormProps
+} from '../../common/data/AddQuestionPropsData';
+import { useSelector } from 'react-redux';
 export default function AddQuestion() {
   const [focusedInput, setFocusedInput] = useState(null);
   const [inputTitle, setInputTitle] = useState('');

@@ -10,14 +10,13 @@ import {
   InputForm
 } from './Header.styled';
 import headerLogoImg from '../../common/image/header-logo.png';
-import Search from '../../common/image/Search.png'
-import profile from '../../common/image/profile.png'
+import Search from '../../common/image/Search.png';
+import profile from '../../common/image/profile.png';
 
-import { logout, setLoginStatus } from '../../redux/actions/loginInfo'
-
+import { logout, setLoginStatus, login } from '../../redux/actions/loginInfo';
 
 export default function Header() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const loginStatus = useSelector((state) => state.loginReducer);
 
@@ -25,23 +24,27 @@ export default function Header() {
     // console.log('로그아웃');
     dispatch(logout());
 
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('userId');
-    console.log(loginStatus)
+    // console.log(loginStatus)
     // window.location.reload();
-  }
-
+  };
 
   useEffect(() => {
     console.log(loginStatus);
-    const storedAccessToken = localStorage.getItem('accessToken')
+    const storedAccessToken = localStorage.getItem('accessToken');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    const storedUserId = localStorage.getItem('userId');
     if (storedAccessToken) {
-      dispatch(setLoginStatus(true))
-      console.log(loginStatus)
+      dispatch(
+        login(true, storedAccessToken, storedRefreshToken, storedUserId)
+      );
+      dispatch(setLoginStatus(true));
+      console.log(loginStatus);
     } else {
-      dispatch(setLoginStatus(false))
-      console.log(loginStatus)
+      dispatch(setLoginStatus(false));
+      console.log(loginStatus);
     }
   }, []);
 
@@ -49,7 +52,7 @@ export default function Header() {
     <HeaderContainer>
       <HeaderWrap>
         <LogoLink to="/">
-          <img src={headerLogoImg} alt='logo' />
+          <img src={headerLogoImg} alt="logo" />
         </LogoLink>
         <InputForm>
           <img src={Search} alt="Search"></img>
@@ -72,12 +75,14 @@ export default function Header() {
           ) : (
             <ul>
               <li>
-                <Btn className='myPageBtn' to="/my-page">
-                  <img src={profile} alt='profile'></img>
+                <Btn className="myPageBtn" to="/my-page">
+                  <img src={profile} alt="profile"></img>
                 </Btn>
               </li>
               <li>
-                <Btn className='logouBtn' onClick={handleLogout}>Log out</Btn>
+                <Btn className="logouBtn" onClick={handleLogout}>
+                  Log out
+                </Btn>
               </li>
             </ul>
           )}
