@@ -3,7 +3,6 @@ package five.group.server.auth.authorizationhandler;
 
 import five.group.server.auth.jwt.JwtTokenizer;
 import five.group.server.error.HandlerErrorResponse;
-import five.group.server.refreshtoken.RefreshToken;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,33 +31,44 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         Exception exception = (Exception) request.getAttribute("exception");
-        String refreshToken = request.getHeader("Authorization").replace("Bearer ","");
-        RefreshToken.verifyRefreshToken(refreshToken);
-        Map<String, Object> claims;
-        if (exception instanceof ExpiredJwtException) {
-            try {
-                claims = (Map<String, Object>) jwtTokenizer.getClaims(refreshToken,
-                        jwtTokenizer.encodedBase64SecretKey(jwtTokenizer.getSecretKey()));
-            } catch (ExpiredJwtException e) {
-                RefreshToken.deleteRefreshToken(refreshToken);
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                HandlerErrorResponse.sendErrorResponse(HttpStatus.UNAUTHORIZED, response);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-                String message = exception != null ? exception.getMessage() : authException.getMessage();
-                log.warn("Authorization Error: {}", message);
+        HandlerErrorResponse.sendErrorResponse(HttpStatus.UNAUTHORIZED, response);
 
-                return;
-            }
-            String username = (String) claims.get("username");
-            Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-            String base64EncodedSecretKey = jwtTokenizer.encodedBase64SecretKey(jwtTokenizer.getSecretKey());
-            String newAccessToken = jwtTokenizer.generateAccessToken(claims,username,expiration,base64EncodedSecretKey);
+        String message = exception != null ? exception.getMessage() : authException.getMessage();
+        log.warn("Authorization Error: {}", message);
 
-            response.setHeader("Authorization","Bearer" + newAccessToken);
+        // 재발급 로직 생각중..
+//        String refreshToken = request.getHeader("Authorization").replace("Bearer ","");
+//        RefreshToken.verifyRefreshToken(refreshToken);
+//        Map<String, Object> claims;
+//        if (exception instanceof ExpiredJwtException) {
+//            try {
+//                claims = (Map<String, Object>) jwtTokenizer.getClaims(refreshToken,
+//                        jwtTokenizer.encodedBase64SecretKey(jwtTokenizer.getSecretKey()));
+//            } catch (ExpiredJwtException e) {
+//                RefreshToken.deleteRefreshToken(refreshToken);
+//                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//
+//                HandlerErrorResponse.sendErrorResponse(HttpStatus.UNAUTHORIZED, response);
+//
+//                String message = exception != null ? exception.getMessage() : authException.getMessage();
+//                log.warn("Authorization Error: {}", message);
+//
+//                return;
+//            }
+//            String username = (String) claims.get("username");
+//            Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+//            String base64EncodedSecretKey = jwtTokenizer.encodedBase64SecretKey(jwtTokenizer.getSecretKey());
+//            String newAccessToken = jwtTokenizer.generateAccessToken(claims,username,expiration,base64EncodedSecretKey);
+//
+//            response.setHeader("Authorization","Bearer" + newAccessToken);
+//
+//        }
 
-        }
 
     }
 }
