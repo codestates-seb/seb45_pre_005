@@ -44,6 +44,10 @@
 
 # 7. API 명세
 
+Notion link : https://www.notion.so/codestates/7c2cf43ed9be44418a8f206c4e8605cf?pvs=4#6240df6832f6419ca0cea946aac83bbf
+
+Postman link : https://documenter.getpostman.com/view/27565469/2s9Y5TyPse
+
 # 8. 화면 구성
 
 
