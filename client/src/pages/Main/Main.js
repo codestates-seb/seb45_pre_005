@@ -27,7 +27,7 @@ export default function Main() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: process.env.REACT_APP_AUTH_TOKEN,
+            'Authorization': localStorage.getItem('accessToken'),
             'ngrok-skip-browser-warning': '69420'
           },
           credentials: 'include',

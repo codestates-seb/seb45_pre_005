@@ -6,14 +6,12 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
-  /* overflow: auto; */
 
   .flex-box {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid #e3e6e8;
-    /* padding: 0 0 1.3rem 0; */
     padding: 1.3rem;
   }
 
@@ -33,7 +31,6 @@ export const MainContainer = styled.div`
     color: #ffffff;
     padding: 10px;
     border-radius: 7px;
-    /* margin: 0 0.3rem; */
     
     &:hover {
       background-color: #0074cc;
