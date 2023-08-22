@@ -17,16 +17,16 @@ export default function MyPage() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken'),
-            'Accept': 'application/json',
+            Authorization: localStorage.getItem('accessToken'),
+            Accept: 'application/json',
             'ngrok-skip-browser-warning': '69420'
           },
           credentials: 'include',
-          mode: 'cors',
+          mode: 'cors'
         });
 
         if (response.ok) {
-          console.log('get user data success');
+          // console.log('get user data success');
           const data = await response.json();
           setUserData(data);
         } else {
@@ -40,13 +40,18 @@ export default function MyPage() {
     fetchUserData();
   }, []);
 
-
   if (!localStorage.getItem('accessToken')) {
     window.location = '/login';
   }
 
   if (!userData) {
-    return <BaseContainer><BaseWrap><h1>Loading...</h1></BaseWrap></BaseContainer>;
+    return (
+      <BaseContainer>
+        <BaseWrap>
+          <h1>Loading...</h1>
+        </BaseWrap>
+      </BaseContainer>
+    );
   }
 
   return (
@@ -54,13 +59,8 @@ export default function MyPage() {
       <BaseWrap>
         <Nav tabNum={3} />
         <MyPageContainer>
-          <UserProfile
-            userData={userData}
-            setUserData={setUserData}
-          />
-          <UserInfo
-            userData={userData}
-          />
+          <UserProfile userData={userData} setUserData={setUserData} />
+          <UserInfo userData={userData} />
         </MyPageContainer>
       </BaseWrap>
       <Footer />

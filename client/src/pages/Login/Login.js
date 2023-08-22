@@ -70,9 +70,9 @@ export default function Login() {
           localStorage.setItem('userId', userId);
 
           dispatch(login(isLoggedIn, accessToken, refreshToken, userId));
-          console.log(loginReducer);
-          console.log(login(isLoggedIn, accessToken, refreshToken, userId));
-          console.log('로그인에 성공했습니다.');
+          // console.log(loginReducer);
+          // console.log(login(isLoggedIn, accessToken, refreshToken, userId));
+          // console.log('로그인에 성공했습니다.');
           navigate('/');
         } else if (response.status === 401) {
           console.log('로그인에 실패했습니다.');

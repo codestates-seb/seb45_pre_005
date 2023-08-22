@@ -26,7 +26,9 @@ export const DetailHeader = styled.div`
     margin-right: 16px;
     margin-bottom: 8px;
   }
-
+  .header-desc-container div span {
+    color: #4b4b4b;
+  }
   .header-desc-container div span:first-child {
     color: var(--gray);
     margin-right: 5px;
@@ -59,67 +61,71 @@ export const DetailContent = styled.div`
   .ql-container {
     min-height: 20em;
   }
-  .innerHtml {
-    h1 {
-      font-size: 2em;
-    }
+`;
+export const InnerHTML = styled.div`
+  h1 {
+    font-size: 2em;
+  }
 
-    h2 {
-      font-size: 1.5em;
-      margin: 0;
-    }
-    h3 {
-      font-size: 1.17em;
-    }
-    p {
-      padding: 0.1rem 0;
-    }
+  h2 {
+    font-size: 1.5em;
+    margin: 0;
+  }
+  h3 {
+    font-size: 1.17em;
+  }
+  p {
+    padding: 0.1rem 0;
+  }
 
-    strong {
-      font-weight: bold;
-    }
+  strong {
+    font-weight: bold;
+  }
 
-    em {
-      font-style: italic;
-    }
+  em {
+    font-style: italic;
+  }
 
-    u {
-      text-decoration: underline;
-    }
+  u {
+    text-decoration: underline;
+  }
 
-    s {
-      text-decoration: line-through;
-    }
+  s {
+    text-decoration: line-through;
+  }
 
-    blockquote {
-      background-color: #f9f9f9;
-      border-left: 4px solid lightgray;
-      padding: 1rem;
-    }
+  blockquote {
+    background-color: #f9f9f9;
+    border-left: 4px solid lightgray;
+    padding: 1rem;
+  }
 
-    ol {
-      list-style: decimal;
-      padding: 1rem;
-    }
+  ol {
+    list-style: decimal;
+    padding: 1rem;
+  }
 
-    ul {
-      list-style: disc;
-      padding: 1rem;
-    }
-    pre.ql-syntax {
-      font-family: monospace;
-      background-color: #f6f6f6;
-      color: #2f3337;
-      overflow: visible;
-      white-space: pre-wrap;
-      margin-bottom: 5px;
-      margin-top: 5px;
-      padding: 5px 10px;
-      border-radius: 3px;
-    }
+  ul {
+    list-style: disc;
+    padding: 1rem;
+  }
+  pre.ql-syntax {
+    font-family: monospace;
+    background-color: #f6f6f6;
+    color: #2f3337;
+    overflow: visible;
+    white-space: pre-wrap;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 5px 10px;
+    border-radius: 3px;
+  }
+
+  a {
+    text-decoration: underline;
+    color: var(--blue-hover);
   }
 `;
-
 export const ButtonContainer = styled.div`
   padding: 24px;
   display: flex;
@@ -167,6 +173,20 @@ export const DescContainer = styled.div`
     color: var(--white) !important;
     background-color: var(--blue-hover);
   }
+
+  .submit-btn:disabled {
+    background-color: #96caff;
+    color: #ffffff;
+    cursor: default;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  .disable-msg {
+    font-size: 11px;
+    color: red;
+    margin-bottom: 8px;
+  }
 `;
 
 export const DetailUserContainer = styled.div`
@@ -194,17 +214,18 @@ export const DetailUserContainer = styled.div`
     background-color: var(--gray-10);
     border-radius: 5px;
     margin-right: 8px;
-  }
-
-  .user-desc-container img {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
 export const AnswerContainer = styled.div`
-  padding: 10px 0;
-
+  padding: 20px 0;
+  margin-top: 20px;
+  border-top: 1px solid var(--gray-10);
   h2 {
     font-size: 19px;
     margin-bottom: 8px;
@@ -228,6 +249,14 @@ export const AnswerFormContainer = styled.div`
     &:hover {
       background-color: var(--blue-hover);
     }
+
+    &:disabled {
+      background-color: #96caff;
+      color: #ffffff;
+      cursor: default;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
   }
   .ql-container {
     min-height: 20em;
@@ -235,5 +264,10 @@ export const AnswerFormContainer = styled.div`
   .ql-toolbar.ql-snow {
     margin: 0;
     padding: 0;
+  }
+  .disable-msg {
+    font-size: 11px;
+    color: red;
+    margin-bottom: 8px;
   }
 `;

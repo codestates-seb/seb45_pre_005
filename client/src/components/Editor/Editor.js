@@ -2,11 +2,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { EditorContainer } from './Editor.styled';
 
-export default function Editor({
-  onFocus,
-  onChange,
-  value
-}) {
+export default function Editor({ onFocus, onChange, value }) {
   return (
     <EditorContainer>
       <ReactQuill
@@ -27,18 +23,25 @@ export default function Editor({
 
 Editor.modules = {
   toolbar: [
-    [{ 'header': [1, 2, 3, false] }],
+    [{ header: [1, 2, 3, false] }],
     ['bold', 'italic', 'underline', 'strike'],
     ['code-block', 'blockquote'],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    ['link', 'image'],
-  ],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['link']
+  ]
 };
 
 Editor.formats = [
-  'header', 'size',
-  'bold', 'italic', 'underline', 'strike',
-  'code-block', 'blockquote',
-  'list', 'bullet',
-  'link', 'image', 'code-block'
+  'header',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'code-block',
+  'blockquote',
+  'list',
+  'bullet',
+  'link',
+  'code-block'
 ];

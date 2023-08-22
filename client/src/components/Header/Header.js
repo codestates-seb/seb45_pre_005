@@ -21,18 +21,14 @@ export default function Header() {
   const loginStatus = useSelector((state) => state.loginReducer);
 
   const handleLogout = () => {
-    // console.log('로그아웃');
     dispatch(logout());
 
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userId');
-    // console.log(loginStatus)
-    // window.location.reload();
   };
 
   useEffect(() => {
-    console.log(loginStatus);
     const storedAccessToken = localStorage.getItem('accessToken');
     const storedRefreshToken = localStorage.getItem('refreshToken');
     const storedUserId = localStorage.getItem('userId');
@@ -41,10 +37,8 @@ export default function Header() {
         login(true, storedAccessToken, storedRefreshToken, storedUserId)
       );
       dispatch(setLoginStatus(true));
-      console.log(loginStatus);
     } else {
       dispatch(setLoginStatus(false));
-      console.log(loginStatus);
     }
   }, []);
 

@@ -26,7 +26,7 @@ export const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
   height: 100%;
-
+  margin-left: 7px;
   &:hover {
     background-color: #e3e6e8;
   }
@@ -44,7 +44,7 @@ export const InputForm = styled.div`
 
   > input {
     padding: 7.8px 9.1px 7.8px 35px;
-    border: 1px solid hsl(210,8%,75%);
+    border: 1px solid hsl(210, 8%, 75%);
     border-radius: 6px;
     font-size: 15px;
     font-weight: 300;
@@ -53,8 +53,8 @@ export const InputForm = styled.div`
     display: block;
     height: 39px;
     &:focus {
-      border: 1px solid #59A4DE;
-      box-shadow: 0px 0px 0px 4px #D9EAF7;
+      border: 1px solid #59a4de;
+      box-shadow: 0px 0px 0px 4px #d9eaf7;
       outline: none;
       transition: none;
     }
@@ -65,31 +65,31 @@ export const InputForm = styled.div`
     height: 22px;
     margin-left: 8px;
   }
-`
+`;
 export const NavContainer = styled.nav`
   padding-right: 12px;
   ul {
     display: flex;
     align-items: center;
   }
-`
+`;
 export const Btn = styled(Link)`
   font-size: 13px;
   font-weight: 200;
   display: inline-block;
   padding: 8px 10.4px;
-  background-color: hsl(205,46%,92%);
-  color: hsl(205,47%,42%);
+  background-color: hsl(205, 46%, 92%);
+  color: hsl(205, 47%, 42%);
   border-radius: 6px;
   transition: none;
 
   &.loginBtn {
-    background-color: hsl(205,46%,92%);
-    color: hsl(205,47%,42%);
+    background-color: hsl(205, 46%, 92%);
+    color: hsl(205, 47%, 42%);
     &:hover {
-      background-color: hsl(205,57%,81%);
+      background-color: hsl(205, 57%, 81%);
       &:active {
-      box-shadow: 0px 0px 0px 4px #D9EAF7;
+        box-shadow: 0px 0px 0px 4px #d9eaf7;
       }
     }
   }
@@ -97,11 +97,11 @@ export const Btn = styled(Link)`
   &.sigupBtn {
     margin-left: 8px;
     color: white;
-    background-color: hsl(206,100%,52%);
+    background-color: hsl(206, 100%, 52%);
     &:hover {
-      background-color: hsl(206,100%,40%);
+      background-color: hsl(206, 100%, 40%);
       &:active {
-      box-shadow: 0px 0px 0px 4px #D9EAF7;
+        box-shadow: 0px 0px 0px 4px #d9eaf7;
       }
     }
   }
@@ -111,14 +111,14 @@ export const Btn = styled(Link)`
     display: flex;
     align-items: center;
     padding: 4px;
-  img {
-    width: 30px;
-    height: 30px;
-  }
-  &:hover {
-      background-color: hsl(205,57%,81%);
+    img {
+      width: 30px;
+      height: 30px;
+    }
+    &:hover {
+      background-color: hsl(205, 57%, 81%);
       &:active {
-      box-shadow: 0px 0px 0px 4px #D9EAF7;
+        box-shadow: 0px 0px 0px 4px #d9eaf7;
       }
     }
   }
@@ -126,12 +126,12 @@ export const Btn = styled(Link)`
   &.logouBtn {
     margin-left: 15px;
     color: white;
-    background-color: hsl(206,100%,52%);
+    background-color: hsl(206, 100%, 52%);
     &:hover {
-      background-color: hsl(206,100%,40%);
+      background-color: hsl(206, 100%, 40%);
       &:active {
-      box-shadow: 0px 0px 0px 4px #D9EAF7;
+        box-shadow: 0px 0px 0px 4px #d9eaf7;
       }
     }
   }
-`
+`;

@@ -9,11 +9,13 @@ import {
   inputGuideProps,
   inputFormProps
 } from '../../common/data/AddQuestionPropsData';
-import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 export default function AddQuestion() {
   const [focusedInput, setFocusedInput] = useState(null);
   const [inputTitle, setInputTitle] = useState('');
   const [inputBody, setInputBody] = useState('');
+
+  const navigate = useNavigate();
 
   const handleTitleChange = (event) => {
     setInputTitle(event.target.value);
@@ -26,7 +28,7 @@ export default function AddQuestion() {
   const handleAllInputDelete = () => {
     setInputTitle('');
     setInputBody('');
-  }
+  };
 
   const htmlToText = (html) => {
     const parser = new DOMParser();
@@ -40,7 +42,9 @@ export default function AddQuestion() {
       return;
     }
 
-    const confirmation = window.confirm('Would you like to register a question?');
+    const confirmation = window.confirm(
+      'Would you like to register a question?'
+    );
     if (confirmation) {
       const data = {
         title: inputTitle,
@@ -48,22 +52,26 @@ export default function AddQuestion() {
       };
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/questions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('accessToken')
-          },
-          body: JSON.stringify(data),
-          credentials: 'include',
-          mode: 'cors'
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/questions`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: localStorage.getItem('accessToken')
+            },
+            body: JSON.stringify(data),
+            credentials: 'include',
+            mode: 'cors'
+          }
+        );
 
         if (response.ok) {
           setInputTitle('');
           setInputBody('');
           alert('Question has been registered.');
-          window.location.href = '/';
+          // window.location.href = '/';
+          navigate('/');
         } else {
           alert('Question submission failed.');
         }
@@ -75,15 +83,18 @@ export default function AddQuestion() {
   };
 
   const handleDiscard = () => {
-    const confirmation = window.confirm('Are you sure you want to discard this question?');
+    const confirmation = window.confirm(
+      'Are you sure you want to discard this question?'
+    );
     if (confirmation) {
       handleAllInputDelete();
       setFocusedInput(null);
       window.scrollTo(0, 0);
     }
-  }
+  };
 
-  const isSubmitButtonDisabled = !inputTitle || htmlToText(inputBody).length < 20;
+  const isSubmitButtonDisabled =
+    !inputTitle || htmlToText(inputBody).length < 20;
 
   return (
     <BaseContainer>
@@ -125,10 +136,7 @@ export default function AddQuestion() {
           >
             Post your question
           </button>
-          <button
-            className="red-btn"
-            onClick={handleDiscard}
-          >
+          <button className="red-btn" onClick={handleDiscard}>
             Discard draft
           </button>
         </AddQuestionContainer>

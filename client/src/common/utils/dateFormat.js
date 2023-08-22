@@ -1,19 +1,30 @@
 export function dateFormat(date) {
-  const param = new Date(date);
-  const now = new Date();
-  // const nowYear = now.getFullYear();
-  // const nowMonth = now.getMonth() + 1;
-  // const nowDay = now.getDate();
+  // const date = new Date(param);
 
-  console.log(now);
-  console.log(param);
-  const diff = now.getTime() - param.getTime();
+  const splitDate1 = date.split('T');
+  const splitDate2 = splitDate1[1].split(':');
 
-  const diffDate = diff / (24 * 60 * 60 * 1000);
-  const diffHour = diff / (60 * 60 * 1000);
-  const diffMin = diff / (60 * 1000);
+  const day = splitDate1[0];
+  const hour = splitDate2[0];
+  const minute = splitDate2[1];
 
-  console.log(diffDate);
-  console.log(diffHour);
-  console.log(diffMin);
+  const formattedDate = `${day} at ${hour}:${minute}`;
+  return formattedDate;
 }
+
+export const fullDateFormat = (param) => {
+  const date = new Date(param);
+  const dateOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false
+  };
+  const formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(
+    date
+  );
+
+  return formattedDate;
+};

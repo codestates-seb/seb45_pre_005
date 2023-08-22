@@ -14,6 +14,10 @@ export const CommentWrap = styled.div`
   .comment-date {
     color: var(--gray);
   }
+  .disable-msg {
+    font-size: 11px;
+    color: red;
+  }
   div {
     margin: 8px 0;
   }
@@ -26,13 +30,22 @@ export const CommentWrap = styled.div`
     color: var(--gray-20);
   }
 
+  .submit-btn {
+    color: var(--blue);
+  }
+
+  .submit-btn:disabled {
+    color: var(--gray);
+    cursor: not-allowed;
+  }
+
   > input {
     padding: 5px;
     border: 1px solid hsl(210, 8%, 75%);
     border-radius: 6px;
     font-size: 12px;
     width: 100%;
-    margin: 8px 0;
+    margin-top: 8px;
     &:focus {
       border: 1px solid #59a4de;
       box-shadow: 0px 0px 0px 4px #d9eaf7;

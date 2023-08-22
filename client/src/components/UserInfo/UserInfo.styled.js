@@ -30,7 +30,7 @@ export const StatsContainer = styled.div`
   border-radius: 5px;
   padding: 1rem 1.5rem;
   margin: 1rem 0;
-
+  text-align: center;
   .data {
     font-size: 17px;
     color: #0c0d0e;
@@ -72,25 +72,24 @@ export const PostItemContainer = styled.div`
 `;
 
 export const NoPostsContainer = styled.div`
-  margin: 3rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   border: 1px solid #d6d9dc;
   border-radius: 5px;
-  padding: 2rem 14.5rem;
-  margin: 1rem 0;
-  background-color: #F8F9F9;
+  padding: 0rem 14.5rem;
+  background-color: #f8f9f9;
   justify-content: center;
   align-items: center;
 
   img {
-    margin: 1rem;
+    margin: 0.5rem;
   }
 
   p {
     font-size: 13px;
     color: #6a737c;
-    margin: 0.5rem;
+    margin: 0.3rem;
     text-align: center;
   }
 `;

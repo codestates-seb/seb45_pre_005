@@ -3,11 +3,9 @@ import { UserProfileConatiner } from './UserProfile.styled';
 import UserImg from '../../common/image/UserImg.png';
 import PenImg from '../../common/image/Pen.png';
 import CakeImg from '../../common/image/Cake.png';
+import profileImg from '../../common/image/profile.png';
 
-export default function UserProfile({
-  userData,
-  setUserData
-}) {
+export default function UserProfile({ userData, setUserData }) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [newNickname, setNewNickname] = useState(userData.data.nickname);
   const inputRef = useRef(null);
@@ -16,10 +14,12 @@ export default function UserProfile({
   const getMemberFor = () => {
     const signupDate = new Date(userData.data.createAt);
     const currentDate = new Date();
-    const timeDiff = currentDate - signupDate + (1000 * 60 * 60 * 24);
+    const timeDiff = currentDate - signupDate + 1000 * 60 * 60 * 24;
 
     const yearsElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365));
-    const monthsElapsed = Math.floor((timeDiff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44));
+    const monthsElapsed = Math.floor(
+      (timeDiff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44)
+    );
     const daysElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
     let result = 'Member for ';
@@ -36,7 +36,7 @@ export default function UserProfile({
     }
 
     return result;
-  }
+  };
 
   useEffect(() => {
     if (isEditMode) {
@@ -47,7 +47,7 @@ export default function UserProfile({
   const handleEditClick = () => {
     setNewNickname(userData.data.nickname);
     setIsEditMode(true);
-  }
+  };
 
   const handleSaveClick = async () => {
     const data = {
@@ -60,10 +60,11 @@ export default function UserProfile({
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('accessToken')
+          Authorization: localStorage.getItem('accessToken')
         },
         body: JSON.stringify(data),
-        credentials: 'include'
+        credentials: 'include',
+        mode: 'cors'
       });
 
       if (response.ok) {
@@ -83,60 +84,63 @@ export default function UserProfile({
     }
 
     setIsEditMode(false);
-  }
+  };
 
   const handleNinknameInput = (e) => {
-    setIsNicknameValid(e.target.value.length >= 2)
+    setIsNicknameValid(e.target.value.length >= 2);
     setNewNickname(e.target.value);
-  }
+  };
 
   return (
     <UserProfileConatiner>
-      <div className='flex-box'>
-        <div className='left-box'>
-          <img src={UserImg} alt="" className='user-img' />
-          <div className='flex-end'>
-            {isEditMode ?
+      <div className="flex-box">
+        <div className="left-box">
+          <img src={UserImg} alt="" className="user-img" />
+          <div className="flex-end">
+            {isEditMode ? (
               <input
                 ref={inputRef}
-                type='text'
+                type="text"
                 value={newNickname}
                 onChange={handleNinknameInput}
                 maxLength={8}
-              /> :
-              <div
-                className='user-nickname'>{userData.data?.nickname || ''}</div>}
-            <div className='user-memberfor'>
-              <img src={CakeImg} alt='' />
+              />
+            ) : (
+              <div className="user-nickname">
+                {userData.data?.nickname || ''}
+              </div>
+            )}
+            <div className="user-memberfor">
+              <img src={CakeImg} alt="" />
               {getMemberFor()}
             </div>
           </div>
         </div>
-        <div className='right-box'>
-          {isEditMode ?
-            <div className='flex-direction-row'>
+        <div className="right-box">
+          {isEditMode ? (
+            <div className="flex-direction-row">
               <button
                 onClick={() => {
                   setIsEditMode(false);
                 }}
-                className='blue-text-btn'
+                className="blue-text-btn"
               >
                 Cancle
               </button>
               <button
                 onClick={handleSaveClick}
-                className='blue-btn'
+                className="blue-btn"
                 disabled={!isNicknameValid}
               >
                 Save Profile
               </button>
-            </div> :
-            <button
-              onClick={handleEditClick}
-            >
-              <img src={PenImg} alt='' />
+            </div>
+          ) : (
+            <button onClick={handleEditClick}>
+              <img src={PenImg} alt="" />
               Edit Profile
-            </button>}
+            </button>
+          )}
         </div>
       </div>
     </UserProfileConatiner>

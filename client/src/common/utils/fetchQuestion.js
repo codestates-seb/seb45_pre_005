@@ -44,3 +44,91 @@ export const deleteQuestion = (id, token) => {
 
   return result;
 };
+
+export const postAnswer = (payload, token) => {
+  const result = fetch(`${BASE_URL}/answers`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    body: JSON.stringify(payload),
+    credentials: 'include',
+    mode: 'cors'
+  }).then((res) => res);
+
+  return result;
+};
+
+export const patchAnswer = (id, payload, token) => {
+  const result = fetch(`${BASE_URL}/answers/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    body: JSON.stringify(payload),
+    credentials: 'include',
+    mode: 'cors'
+  }).then((res) => res);
+
+  return result;
+};
+
+export const deleteAnswer = (id, token) => {
+  const result = fetch(`${BASE_URL}/answers/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }).then((res) => res);
+
+  return result;
+};
+
+export const postComment = (payload, token) => {
+  const result = fetch(`${BASE_URL}/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    body: JSON.stringify(payload),
+    credentials: 'include',
+    mode: 'cors'
+  }).then((res) => res);
+
+  return result;
+};
+
+export const patchComment = (id, payload, token) => {
+  const result = fetch(`${BASE_URL}/comments/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    body: JSON.stringify(payload),
+    credentials: 'include',
+    mode: 'cors'
+  }).then((res) => res);
+
+  return result;
+};
+
+export const deleteComment = (id, token) => {
+  const result = fetch(`${BASE_URL}/comments/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }).then((res) => res);
+
+  return result;
+};

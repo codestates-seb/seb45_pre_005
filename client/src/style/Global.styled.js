@@ -44,13 +44,14 @@ export const GlobalStyle = createGlobalStyle`
       vertical-align: baseline;
       text-decoration: none;
       color: var(--black);
-      transition: 0.3s ease all;
+      transition: 0.15s ease all;
     }
 
   body {
     min-height : 100vh;
     width: 100vw;
     overflow-x: hidden;
+    overflow-y: scroll;
   }
 
   ol, ul {
