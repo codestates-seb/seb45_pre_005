@@ -63,7 +63,7 @@
 ## 📂 Project Docs
 <details>
   <summary><strong>요구사항 정의서</strong></summary>
-  <img src="https://github.com/pnr98/todo-practice/assets/129926357/b0a0cebe-5e0c-48ad-903f-8bca3779094a" width=70%>
+  <img src="https://github.com/pnr98/3.mini_hackathon/assets/129926357/275022a4-6759-4aa2-b5af-514346136735" width=70%>
   
 </details>
 
@@ -74,7 +74,7 @@
 
 <details>
 <summary><strong>테이블 구성</strong></summary>
-<img src="https://github.com/pnr98/todo-practice/assets/129926357/b43131fe-df69-416a-9336-02db28f0bc2e" width=70%>
+<img src="https://github.com/pnr98/3.mini_hackathon/assets/129926357/9e4b7a9a-b406-4d91-88e9-dd767c90caec" width=70%>
 </details>
 
 <details>
