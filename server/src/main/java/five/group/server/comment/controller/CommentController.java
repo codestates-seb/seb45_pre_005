@@ -28,7 +28,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post requestBody) {
+    public ResponseEntity postComment( @Valid @RequestBody CommentDto.Post requestBody) {
 
         Comment comment = commentMapper.commentPostDtoToComment(requestBody);
 
@@ -40,10 +40,11 @@ public class CommentController {
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive Long commentId,
                                        @Valid @RequestBody CommentDto.Patch requestBody){
 
-        requestBody.setCommentId(commentId);
+        Comment comment = commentMapper.commentPatchDtoToComment(requestBody);
+        comment.setCommentId(commentId);
 
         Comment updateComment =
-                commentService.updateComment(commentMapper.commentPatchDtoToComment(requestBody));
+                commentService.updateComment(comment);
 
 //        Comment comment = commentMapper.commentPatchDtoToComment(requestBody);
 //

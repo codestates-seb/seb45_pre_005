@@ -1,14 +1,17 @@
 package five.group.server.security;
 
-import five.group.server.auth.*;
+import five.group.server.auth.authorizationhandler.MemberAuthenticationEntryPoint;
+import five.group.server.auth.authenticationhandler.MemberAuthenticationFailureHandler;
+import five.group.server.auth.authenticationhandler.MemberAuthenticationSuccessHandler;
+import five.group.server.auth.authorizationhandler.MemberDeniedHandler;
 import five.group.server.auth.jwt.JwtAuthenticationFilter;
 import five.group.server.auth.jwt.JwtTokenizer;
 import five.group.server.auth.jwt.JwtVerificationFilter;
+import five.group.server.auth.userdetails.MemberAuthority;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -44,27 +47,26 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint(jwtTokenizer))
                 .accessDeniedHandler(new MemberDeniedHandler())
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
-                .authorizeHttpRequests().anyRequest().permitAll();
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .antMatchers(HttpMethod.GET,"/members").hasRole("USER")
-//                        .antMatchers(HttpMethod.PATCH,"/members").hasRole("USER")
-//                        .antMatchers(HttpMethod.DELETE,"/members").hasRole("USER")
-//                        .antMatchers(HttpMethod.POST,"/questions").hasRole("USER")
-//                        .antMatchers(HttpMethod.PATCH,"/questions/*").hasRole("USER")
-//                        .antMatchers(HttpMethod.DELETE,"/questions/*").hasRole("USER")
-//                        .antMatchers(HttpMethod.POST,"/answers/*").hasRole("USER")
-//                        .antMatchers(HttpMethod.PATCH,"/answers/*").hasRole("USER")
-//                        .antMatchers(HttpMethod.DELETE,"/answers/*").hasRole("USER")
-//                        .antMatchers(HttpMethod.POST,"/comments/*").hasRole("USER")
-//                        .antMatchers(HttpMethod.PATCH,"/comments/*").hasRole("USER")
-//                        .antMatchers(HttpMethod.DELETE,"/comments/*").hasRole("USER")
-//                        .anyRequest().permitAll()
-//        );
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.GET, "/members").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/members").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/members").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/questions").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/questions/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/questions/*").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/answers/*").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/answers/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/answers/*").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/comments/*").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/comments/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/comments/*").hasRole("USER")
+                        .anyRequest().permitAll()
+                );
 
 
         return http.build();
@@ -78,10 +80,10 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() { // CORS 필터 처리
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET","PATCH","DELETE","POST","OPTIONS"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "PATCH", "DELETE", "POST", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Refresh"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Refresh", "memberId"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -98,7 +100,7 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer,memberAuthority);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, memberAuthority);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

@@ -61,9 +61,9 @@ public class CommentService {
 
     // Question 상세 정보 조회시 answer 와 같이 뿌려줄 comment
     public List<CommentDetailResponseDto> getComments(Long answerId) {
-        List<Comment> commentList =commentRepository.findAll().stream()
+        Answer findAnswer = answerService.findVerifiedAnswer(answerId);
+        List<Comment> commentList = findAnswer.getCommentList().stream()
                 .filter(comment ->  comment.getCommentStatus().equals(Comment.CommentStatus.COMMENT_POSTED))
-                .filter(comment -> comment.getAnswer().getAnswerId() == answerId)
                 .collect(Collectors.toList());
 
         return commentList.stream()

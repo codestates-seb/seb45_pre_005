@@ -16,7 +16,9 @@ public enum ExceptionCode {
 
     LIKE_NOT_FOUND(404, "Like not found"),
     NO_AUTHORIZATION(403, "Authorized Member Only"),
-    NO_PERMISSION(401, "Member Only");
+    NO_PERMISSION(401, "Member Only"),
+    LIKE_ONLY_ONE_TIME(403, "Like is only onetime"),
+    NO_TOKEN(404,"No Token in Repository");
 
     @Getter
     private int code;

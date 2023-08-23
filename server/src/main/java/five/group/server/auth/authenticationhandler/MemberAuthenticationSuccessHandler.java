@@ -1,4 +1,4 @@
-package five.group.server.auth;
+package five.group.server.auth.authenticationhandler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

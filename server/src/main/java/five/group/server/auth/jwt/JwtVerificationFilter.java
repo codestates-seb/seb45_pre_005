@@ -1,6 +1,6 @@
 package five.group.server.auth.jwt;
 
-import five.group.server.auth.MemberAuthority;
+import five.group.server.auth.userdetails.MemberAuthority;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

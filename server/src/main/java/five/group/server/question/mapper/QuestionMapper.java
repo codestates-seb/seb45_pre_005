@@ -7,13 +7,28 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
-//    @Mapping(source = "memberId", target = "member.memberId")
+    //    @Mapping(source = "memberId", target = "member.memberId")
     Question questionPostDtoToQuestion(QuestionDto.Post requestBody);
+
     Question questionPatchDtoToQuestion(QuestionDto.Patch requestBody);
-    List<QuestionDto.responsePage> questionsToQuestionList(List<Question> questionList);
+
+    default List<QuestionDto.responsePage> questionsToQuestionList(List<Question> questionList) {
+        return questionList.stream()
+                .map(question -> new QuestionDto.responsePage(
+                        question.getMember().getMemberId(),
+                        question.getQuestionId(),
+                        question.getTitle(),
+                        question.getContent(),
+                        question.getMember().getNickname(),
+                        question.getViewCount(),
+                        question.getAnswers().size(),
+                        question.getCreatedAt()
+                )).collect(Collectors.toList());
+    }
 
     default QuestionDto.responsePage questionsToQuestionListDto(Question question) {
         QuestionDto.responsePage QuestionListDto =
@@ -21,8 +36,8 @@ public interface QuestionMapper {
                         .memberId(question.getMember().getMemberId())
                         .questionId(question.getQuestionId())
                         .title(question.getTitle())
-                        .nickname(question.getMember().getNickname())
                         .content(question.getContent())
+                        .nickname(question.getMember().getNickname())
                         .createdAt(question.getCreatedAt())
                         .build();
 

@@ -1,7 +1,7 @@
-package five.group.server.auth;
+package five.group.server.auth.userdetails;
 
+import five.group.server.auth.userdetails.MemberAuthority;
 import five.group.server.exception.BusinessLogicException;
-import five.group.server.exception.ExceptionCode;
 import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;

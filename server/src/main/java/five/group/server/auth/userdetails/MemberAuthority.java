@@ -1,4 +1,4 @@
-package five.group.server.auth;
+package five.group.server.auth.userdetails;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

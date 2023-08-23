@@ -7,6 +7,7 @@ import five.group.server.member.entity.Member;
 import five.group.server.member.repository.MemberRepository;
 import five.group.server.member.service.MemberService;
 import five.group.server.question.dto.QuestionDto;
+import five.group.server.question.dto.QuestionGetDetailResponse;
 import five.group.server.question.entity.Question;
 import five.group.server.question.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
@@ -94,11 +95,11 @@ public class QuestionService {
                         question.getTitle(),
                         question.getContent(),
                         question.getMember().getNickname(),
+                        question.getViewCount(),
                         question.getAnswers().size(),
                         question.getCreatedAt())
                 ).collect(Collectors.toList());
     }
-
     private void verifyAuthorization(Question question) {
         Member findMember = memberService.findAuthenticatedMember();
         if (question.getMember().getMemberId() != findMember.getMemberId()) {
