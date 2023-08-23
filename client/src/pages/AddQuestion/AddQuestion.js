@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../../components/Footer/Footer';
 import { BaseContainer, BaseWrap } from '../../style/Global.styled';
 import { AddQuestionContainer } from './AddQuestion.styled';
@@ -16,6 +16,12 @@ export default function AddQuestion() {
   const [inputBody, setInputBody] = useState('');
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      window.location = '/login';
+    }
+  }, []);
 
   const handleTitleChange = (event) => {
     setInputTitle(event.target.value);
