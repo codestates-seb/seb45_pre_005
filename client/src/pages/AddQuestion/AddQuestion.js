@@ -19,7 +19,8 @@ export default function AddQuestion() {
 
   useEffect(() => {
     if (!localStorage.getItem('accessToken')) {
-      window.location = '/login';
+      // window.location = '/login';
+      navigate('/login');
     }
   }, []);
 

@@ -5,13 +5,22 @@ import UserProfile from '../../components/UserProfile/UserProfile';
 import UserInfo from '../../components/UserInfo/UserInfo';
 import { BaseContainer, BaseWrap } from '../../style/Global.styled';
 import { MyPageContainer } from './MyPage.styled';
-
+import { useNavigate } from 'react-router-dom';
 export default function MyPage() {
   const [userData, setUserData] = useState(null);
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      // window.location = '/login';
+      navigate('/login');
+      return;
+    }
+
     async function fetchUserData() {
-      const url = `/members`;
+      // const url = `/members`;
+      const url = `${BASE_URL}/members`;
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -39,10 +48,6 @@ export default function MyPage() {
 
     fetchUserData();
   }, []);
-
-  if (!localStorage.getItem('accessToken')) {
-    window.location = '/login';
-  }
 
   if (!userData) {
     return (

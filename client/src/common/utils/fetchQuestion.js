@@ -2,7 +2,7 @@
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const getQuestion = (id) => {
-  const result = fetch(`/questions/${id}`, {
+  const result = fetch(`${BASE_URL}/questions/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

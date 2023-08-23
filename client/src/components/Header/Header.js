@@ -14,18 +14,25 @@ import Search from '../../common/image/Search.png';
 import profile from '../../common/image/profile.png';
 
 import { logout, setLoginStatus, login } from '../../redux/actions/loginInfo';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 export default function Header() {
   const dispatch = useDispatch();
 
   const loginStatus = useSelector((state) => state.loginReducer);
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = location.pathname;
   const handleLogout = () => {
     dispatch(logout());
 
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userId');
+
+    if (path == '/my-page') {
+      navigate('/login');
+      return;
+    }
   };
 
   useEffect(() => {

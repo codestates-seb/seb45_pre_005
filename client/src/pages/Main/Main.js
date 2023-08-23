@@ -18,9 +18,12 @@ export default function Main() {
   const [curPage, setCurPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1);
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     async function fetchQuestions(page) {
-      const url = `/questions?size=10&page=${page}`;
+      // const url = `/questions?size=10&page=${page}`;
+      const url = `${BASE_URL}/questions?page=${page}`;
 
       try {
         const response = await fetch(url, {
