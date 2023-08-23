@@ -78,6 +78,7 @@ public class AnswerService {
         List<Answer> answerList = findQuestion.getAnswers();
 
         List<AnswerDetailResponseDto> answerDetailList = answerList.stream()
+                .filter(answer -> answer.getAnswerStatus().equals(Answer.AnswerStatus.ANSWER_POSTED))
                 .map(answer -> new AnswerDetailResponseDto(
                         answer.getMember().getMemberId(),
                         answer.getAnswerId(),

@@ -16,12 +16,12 @@ public class QuestionDto {
     @AllArgsConstructor
     public static class Post {
 
-//        @NotBlank(message = "타이틀을 입력하세요.")
-//        @Size(max = 30, message = "제목은 최대 30자까지 입력할 수 있습니다.")
+        @NotBlank(message = "타이틀을 입력하세요.")
+        @Size(max = 30, message = "제목은 최대 30자까지 입력할 수 있습니다.")
         private String title;
 
-//        @NotBlank(message = "본문을 입력하세요.")
-//        @Size(max = 200, message = "본문은 최대 200자까지 입력할 수 있습니다.")
+        @NotBlank(message = "본문을 입력하세요.")
+        @Size(max = 200, message = "본문은 최대 200자까지 입력할 수 있습니다.")
         private String content;
     }
 
@@ -31,12 +31,12 @@ public class QuestionDto {
     @AllArgsConstructor
     public static class Patch {
 
-//        @NotBlank(message = "타이틀을 입력하세요.")
-//        @Size(max = 30, message = "제목은 최대 30자까지 입력할 수 있습니다.")
+        @NotBlank(message = "타이틀을 입력하세요.")
+        @Size(max = 30, message = "제목은 최대 30자까지 입력할 수 있습니다.")
         private String title;
 
-//        @NotBlank(message = "본문을 입력하세요.")
-//        @Size(max = 200, message = "본문은 최대 200자까지 입력할 수 있습니다.")
+        @NotBlank(message = "본문을 입력하세요.")
+        @Size(max = 200, message = "본문은 최대 200자까지 입력할 수 있습니다.")
         private String content;
 
     }

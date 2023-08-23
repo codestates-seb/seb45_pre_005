@@ -5,7 +5,6 @@ import five.group.server.exception.ExceptionCode;
 
 import java.util.List;
 
-// 재발급 로직 생각 중..
 //public class RefreshToken {
 //
 //    private static List<String> refreshTokenRepository;
@@ -22,5 +21,4 @@ import java.util.List;
 //    public static void deleteRefreshToken(String refreshToken){
 //        refreshTokenRepository.remove(refreshToken);
 //    }
-//
-//}
+

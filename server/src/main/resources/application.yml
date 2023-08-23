@@ -1,8 +1,4 @@
 spring:
-  h2:
-    console:
-      enabled: true
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,15 +6,18 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/stackoverflow
-      username: root
-      password: 6083dnfl12!@
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    datasource:
+        url: jdbc:mysql://stackoverflow-005.cgbzoy0x62zh.ap-northeast-2.rds.amazonaws.com/stackoverflow005?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+        username: admin
+        password:  ${MYSQL_SECRET}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
 
 
 jwt:
-  secretKey: ehdals12341234123412341234123412341234
-  access-token-expiration-minutes: 720
-  refresh-token-expiration-minutes: 720
+  secretKey: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
 

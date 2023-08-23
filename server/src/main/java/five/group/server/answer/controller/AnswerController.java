@@ -34,7 +34,7 @@ public class AnswerController {
     }
 
     @PostMapping
-    public ResponseEntity postAnswer(@RequestBody AnswerPostDto postDto){
+    public ResponseEntity postAnswer(@Valid @RequestBody AnswerPostDto postDto){
         Answer answer = answerMapper.postDtoToEntity(postDto);
         Long questionId = postDto.getQuestionId();
         answerService.createAnswer(answer, questionId);
@@ -43,7 +43,7 @@ public class AnswerController {
     }
     @PatchMapping("/{answer-id}")
     public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive Long answerId,
-                                       @RequestBody AnswerPatchDto patchDto){
+                                      @Valid @RequestBody AnswerPatchDto patchDto){
         Answer answer = answerMapper.patchDtoToEntity(patchDto);
         answer.setAnswerId(answerId);
         Answer updateAnswer = answerService.updateAnswer(answer);

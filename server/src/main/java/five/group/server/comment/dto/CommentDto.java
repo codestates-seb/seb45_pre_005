@@ -2,6 +2,8 @@ package five.group.server.comment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -22,18 +24,15 @@ public class CommentDto {
     }
 
     @Getter
+    @Setter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Patch {
-        @Positive
-        private Long commentId;
 
         @NotBlank(message = "댓글을 입력하세요")
         @Size(max = 200, message = "댓글은 최대 200자까지 입력할 수 있습니다.")
         private String content;
 
-        public void setCommentId(Long commentId) {
-            this.commentId = commentId;
-        }
     }
 
     @Getter

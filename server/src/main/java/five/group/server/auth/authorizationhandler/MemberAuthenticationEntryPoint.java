@@ -3,6 +3,7 @@ package five.group.server.auth.authorizationhandler;
 
 import five.group.server.auth.jwt.JwtTokenizer;
 import five.group.server.error.HandlerErrorResponse;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,9 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
         String message = exception != null ? exception.getMessage() : authException.getMessage();
         log.warn("Authorization Error: {}", message);
 
-        // 재발급 로직 생각중..
+//        // 재발급 로직 생각중..
+//
+//        Exception exception = (Exception) request.getAttribute("exception");
 //        String refreshToken = request.getHeader("Authorization").replace("Bearer ","");
 //        RefreshToken.verifyRefreshToken(refreshToken);
 //        Map<String, Object> claims;
@@ -66,9 +69,9 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
 //            String newAccessToken = jwtTokenizer.generateAccessToken(claims,username,expiration,base64EncodedSecretKey);
 //
 //            response.setHeader("Authorization","Bearer" + newAccessToken);
-//
-//        }
+
+        }
 
 
     }
-}
+
