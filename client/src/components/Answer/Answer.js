@@ -38,8 +38,13 @@ export default function Answer({ answer, setAnswers, answers }) {
   const loginState = useSelector((state) => state.loginReducer);
   const dispatch = useDispatch();
   const param = useParams();
+  const [inputDisable, setInputDisable] = useState(false);
 
   useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      setInputDisable(true);
+    }
+
     setComments(answer.commentList);
     setEditContent(answer.content);
   }, []);
@@ -290,7 +295,10 @@ export default function Answer({ answer, setAnswers, answers }) {
             type="text"
             value={commentContent}
             onChange={handleCommentChange}
-            placeholder="Please enter a comment."
+            placeholder={
+              inputDisable ? 'Please log in.' : 'Please enter a comment.'
+            }
+            disabled={inputDisable}
           />
           <p>{commentMsg}</p>
           <button

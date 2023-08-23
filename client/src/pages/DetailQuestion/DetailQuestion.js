@@ -54,6 +54,7 @@ export default function DetailQuestion() {
   const loginState = useSelector((state) => state.loginReducer);
   const [askedDate, setAskedDate] = useState('');
   const [modifiedDate, setModifiedDate] = useState('');
+  const [inputDisable, setInputDisable] = useState(false);
   useEffect(() => {
     getQuestion(param.id)
       .then((value) => {
@@ -66,6 +67,10 @@ export default function DetailQuestion() {
       })
       .catch((error) => console.log(error));
     setPostMsg('');
+
+    if (!localStorage.getItem('accessToken')) {
+      setInputDisable(true);
+    }
   }, []);
 
   const handleTitleChange = (event) => {
@@ -98,6 +103,13 @@ export default function DetailQuestion() {
   };
 
   const handleAnswerChange = (html) => {
+    if (inputDisable) {
+      setAnswerContent('');
+      setPostDisabled(true);
+      setPostMsg('* 로그인을 해주세요.');
+      return;
+    }
+
     if (htmlToText(html).length < 20) {
       setPostDisabled(true);
       setPostMsg('* 20자 이상 입력해주세요.');
