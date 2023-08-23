@@ -80,7 +80,7 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() { // CORS 필터 처리
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3000","http://seb-45-pre.s3-website.ap-northeast-2.amazonaws.com"));
         configuration.setAllowedMethods(Arrays.asList("GET", "PATCH", "DELETE", "POST", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Refresh", "memberId"));

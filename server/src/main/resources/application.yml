@@ -2,17 +2,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://stackoverflow-005.cgbzoy0x62zh.ap-northeast-2.rds.amazonaws.com:13306/stackoverflow005
-    username: ${MSQL_USERNAME}
-    password: ${MYSQL_SECRET}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
-      properties:
-        hibernate:
-          format_sql: true
-          dialect: org.hibernate.dialect.MySQLDialect
-
+      format_sql: true
 jwt:
   secretKey: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 30
